@@ -1,0 +1,39 @@
+# Node
+node_modules/
+*.log
+.env
+.env.local
+.env.*.local
+
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+build/
+**/google-services.json
+**/GoogleService-Info.plist
+
+# Next.js
+.next/
+out/
+.vercel
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / sensitive
+*.pem
+*.key
+secrets/
+
+# Test artifacts
+coverage/
+*.lcov
