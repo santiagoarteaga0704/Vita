@@ -7,12 +7,33 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
-  const [sent, setSent] = useState(false);
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [magicSent, setMagicSent] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handlePasswordLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+    const supabase = createSupabaseBrowserClient();
+    const { error: err } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    setLoading(false);
+    if (err) {
+      setError(err.message);
+    } else {
+      window.location.href = '/';
+    }
+  };
+
+  const handleMagicLink = async () => {
+    if (!email) {
+      setError('Ingresá tu email primero');
+      return;
+    }
     setLoading(true);
     setError(null);
     const supabase = createSupabaseBrowserClient();
@@ -22,7 +43,7 @@ export default function LoginPage() {
     });
     setLoading(false);
     if (err) setError(err.message);
-    else setSent(true);
+    else setMagicSent(true);
   };
 
   return (
@@ -33,23 +54,58 @@ export default function LoginPage() {
           <p className="text-sm text-gray-500">Panel de gestión de escaneos</p>
         </CardHeader>
         <CardContent>
-          {sent ? (
-            <p className="text-green-700">
-              Te mandamos un link a <strong>{email}</strong>. Revisá tu email y
-              clickeá para entrar.
-            </p>
+          {magicSent ? (
+            <div>
+              <p className="text-green-700 mb-3">
+                ✅ Te mandamos un link a <strong>{email}</strong>. Revisá tu email.
+              </p>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => setMagicSent(false)}
+              >
+                Volver
+              </Button>
+            </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handlePasswordLogin} className="space-y-4">
               <Input
                 type="email"
                 required
                 placeholder="tu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
+              />
+              <Input
+                type="password"
+                required
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
               />
               {error && <p className="text-sm text-red-600">{error}</p>}
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'Enviando...' : 'Enviar link mágico'}
+                {loading ? 'Entrando...' : 'Iniciar sesión'}
+              </Button>
+              <div className="relative my-2">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="bg-white px-2 text-gray-500">o</span>
+                </div>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                disabled={loading}
+                onClick={handleMagicLink}
+              >
+                Enviar magic link al email
               </Button>
             </form>
           )}

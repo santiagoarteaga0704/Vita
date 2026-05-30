@@ -4,9 +4,12 @@ import 'core/api/api_client.dart';
 import 'app/app.dart';
 
 void main() {
-  // Emulador Android: 10.0.2.2 mapea a localhost de la PC host.
-  // Para dispositivo físico, reemplazar por IP local de la PC (ej: http://192.168.1.10:3000)
-  // Para producción, usar URL de Railway (ej: https://agroscan-backend.up.railway.app)
-  ApiClient.init(baseUrl: 'http://10.0.2.2:3000');
+  // Base URL del backend según plataforma:
+  // - Web (Chrome/Edge): localhost:3000 (mismo host)
+  // - Emulador Android: 10.0.2.2:3000 (alias del host)
+  // - Dispositivo físico: IP local PC (ej: 192.168.1.10:3000)
+  // - Producción: URL Railway
+  const baseUrl = String.fromEnvironment('API_URL', defaultValue: 'http://localhost:3000');
+  ApiClient.init(baseUrl: baseUrl);
   runApp(const ProviderScope(child: AgroScanApp()));
 }

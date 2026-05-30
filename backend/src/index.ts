@@ -12,14 +12,17 @@ import { errorHandler } from './middleware/errors.js';
 
 const app = express();
 
-const corsOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  ...(config.WEB_ADMIN_URL ? [config.WEB_ADMIN_URL] : []),
-];
+const isDev = config.NODE_ENV === 'development';
+const corsOriginCheck = (origin: string | undefined, cb: (err: Error | null, allow?: boolean) => void) => {
+  if (!origin) return cb(null, true);
+  if (isDev && /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) return cb(null, true);
+  const whitelist = ['http://localhost:3000', 'http://localhost:3001', config.WEB_ADMIN_URL].filter(Boolean);
+  if (whitelist.includes(origin)) return cb(null, true);
+  cb(new Error('CORS not allowed'), false);
+};
 
 app.use(helmet());
-app.use(cors({ origin: corsOrigins, credentials: true }));
+app.use(cors({ origin: corsOriginCheck, credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 
 app.get('/health', (_req, res) => {
