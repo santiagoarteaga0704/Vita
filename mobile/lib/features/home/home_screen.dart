@@ -11,7 +11,7 @@ class HomeScreen extends ConsumerWidget {
     final userAsync = ref.watch(currentUserProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AgroScan'),
+        title: const Text('Vita'),
         actions: [
           IconButton(
             icon: const Icon(Icons.history),

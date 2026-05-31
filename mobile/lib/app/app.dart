@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'router.dart';
 import 'theme.dart';
 
-class AgroScanApp extends ConsumerWidget {
-  const AgroScanApp({super.key});
+class VitaApp extends ConsumerWidget {
+  const VitaApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
-      title: 'AgroScan',
+      title: 'Vita',
       theme: AppTheme.light,
       routerConfig: router,
       debugShowCheckedModeBanner: false,

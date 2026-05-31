@@ -11,5 +11,5 @@ void main() {
   // - Producción: URL Railway
   const baseUrl = String.fromEnvironment('API_URL', defaultValue: 'http://localhost:3000');
   ApiClient.init(baseUrl: baseUrl);
-  runApp(const ProviderScope(child: AgroScanApp()));
+  runApp(const ProviderScope(child: VitaApp()));
 }
