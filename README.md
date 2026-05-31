@@ -23,7 +23,7 @@
 | Geimbert Santiago Arteaga Silva | 7780954 |
 | José Dainer Cáceres Valencia | 6554439 |
 | Gabriel Antony Choque Benavides | 7218854 |
-| Sebastian Caleb Alcivar Cox | 77888901 |
+| Sebastian Caleb Alcivar Cox | 11381907 |
 
 ## El proyecto
 
