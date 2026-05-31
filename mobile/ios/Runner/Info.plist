@@ -66,5 +66,12 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
+    <key>NSCameraUsageDescription</key>
+    <string>Necesitamos acceso a la cámara para que puedas escanear las plagas de tus cultivos.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Necesitamos acceso a tus fotos para que puedas subir imágenes de plagas ya capturadas.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Usamos tu ubicación para georreferenciar el escaneo de la plaga y darte alertas climáticas precisas.</string>
 </dict>
 </plist>
