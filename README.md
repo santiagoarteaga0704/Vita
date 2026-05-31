@@ -5,6 +5,15 @@
 >
 > Hackathon Build With AI 2026 · Mención **AGRO** · UCB Santa Cruz · 29-31 de mayo de 2026
 
+## Entrega oficial — Hackathon
+
+| Entregable | Archivo |
+|---|---|
+| Documento técnico (PDF) | [`docs/entrega/Vita-Documento-Tecnico.pdf`](docs/entrega/Vita-Documento-Tecnico.pdf) |
+| Diapositivas del pitch (PDF) | [`docs/entrega/Vita-Pitch.pdf`](docs/entrega/Vita-Pitch.pdf) |
+| Código MVP funcional | Este mismo repositorio — ver [`COMO_CORRER.md`](COMO_CORRER.md) para arrancarlo en menos de 5 minutos |
+| Video demo en YouTube | _Pendiente — se agrega el link cuando esté publicado_ |
+
 ## Equipo
 
 **Equipo:** Vita
