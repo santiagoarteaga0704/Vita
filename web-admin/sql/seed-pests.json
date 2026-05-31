@@ -1,0 +1,102 @@
+[
+  {
+    "common_name": "Roya asiática de la soya",
+    "scientific_name": "Phakopsora pachyrhizi",
+    "affected_crops": ["soya"],
+    "visual_signs": "Pústulas marrones en el envés de hojas, halo amarillo. Avanza desde hojas bajas hacia arriba. Defoliación temprana.",
+    "treatment_organic": { "method": "Caldo bordelés", "ingredients": ["Sulfato de cobre", "Cal apagada"], "dosage": "5g/L de agua", "frequency": "Cada 7 días, 3 aplicaciones", "notes": "Aplicar al atardecer" },
+    "treatment_chemical": { "actives": ["Triazol", "Estrobilurina"], "dosage_per_ha": "0.5 L/ha", "timing": "Al atardecer, sin viento", "brands": ["Opera", "Cypress", "Priori Xtra"] },
+    "prevention": "Variedades resistentes, rotación de cultivos, monitoreo desde V3.",
+    "weather_risk": { "humidity_min_pct": 80, "temp_range_c": [20, 30], "rain_post_application_warn_hours": 24, "notes": "Favorecida por humedad >80%. La lluvia en las 24h post-fumigación lava el activo." }
+  },
+  {
+    "common_name": "Mancha foliar de la soya",
+    "scientific_name": "Septoria glycines",
+    "affected_crops": ["soya"],
+    "visual_signs": "Manchas pequeñas color marrón rojizo en hojas inferiores, contorno angular.",
+    "treatment_organic": { "method": "Extracto de cola de caballo", "ingredients": ["Equisetum arvense"], "dosage": "10g/L", "frequency": "Semanal preventivo" },
+    "treatment_chemical": { "actives": ["Carbendazim", "Mancozeb"], "dosage_per_ha": "1 L/ha", "timing": "Cuando aparecen primeras manchas", "brands": ["Manzate", "Carben 500"] },
+    "prevention": "Densidad adecuada, ventilación entre hileras, no monocultivo.",
+    "weather_risk": { "humidity_min_pct": 75, "temp_range_c": [18, 28], "rain_post_application_warn_hours": 12 }
+  },
+  {
+    "common_name": "Gusano cogollero",
+    "scientific_name": "Spodoptera frugiperda",
+    "affected_crops": ["maíz", "soya", "sorgo"],
+    "visual_signs": "Hojas con perforaciones grandes, aserrín de excrementos en el cogollo, larva verde con cabeza marrón.",
+    "treatment_organic": { "method": "Bacillus thuringiensis (Bt)", "ingredients": ["Bt kurstaki"], "dosage": "500g/ha", "frequency": "Cada 7-10 días", "notes": "Aplicar al atardecer, larva pequeña" },
+    "treatment_chemical": { "actives": ["Clorantraniliprol", "Spinetoram"], "dosage_per_ha": "0.1 L/ha", "timing": "Larvas L1-L3", "brands": ["Coragen", "Belt"] },
+    "prevention": "Trampas de feromonas, control biológico con avispas Trichogramma, refugios.",
+    "weather_risk": { "humidity_min_pct": 0, "temp_range_c": [22, 32], "rain_post_application_warn_hours": 8, "notes": "Adultos vuelan con temperaturas cálidas. Lluvia leve OK, lluvia fuerte lava Bt." }
+  },
+  {
+    "common_name": "Mosca blanca",
+    "scientific_name": "Bemisia tabaci",
+    "affected_crops": ["tomate", "soya", "algodón"],
+    "visual_signs": "Insectos blancos voladores debajo de las hojas, melaza pegajosa, fumagina negra, hojas amarillas y enrolladas.",
+    "treatment_organic": { "method": "Jabón potásico", "ingredients": ["Jabón potásico"], "dosage": "10ml/L", "frequency": "Cada 5 días, 3 aplicaciones" },
+    "treatment_chemical": { "actives": ["Pimetrozina", "Imidacloprid"], "dosage_per_ha": "0.3 L/ha", "timing": "Adultos volando o ninfas", "brands": ["Plenum", "Confidor"] },
+    "prevention": "Trampas amarillas adhesivas, malla anti-insectos, eliminar malezas hospederas.",
+    "weather_risk": { "humidity_min_pct": 0, "temp_range_c": [25, 35], "rain_post_application_warn_hours": 6, "notes": "Sequía + calor favorece poblaciones." }
+  },
+  {
+    "common_name": "Tizón tardío",
+    "scientific_name": "Phytophthora infestans",
+    "affected_crops": ["papa", "tomate"],
+    "visual_signs": "Manchas marrón-negras en hojas con halo amarillo, vello blanco en envés en clima húmedo. Frutos con manchas duras marrones.",
+    "treatment_organic": { "method": "Caldo bordelés", "ingredients": ["Sulfato cobre", "Cal"], "dosage": "5g/L", "frequency": "Preventivo cada 7 días en clima húmedo" },
+    "treatment_chemical": { "actives": ["Metalaxil", "Mancozeb", "Cimoxanilo"], "dosage_per_ha": "2 kg/ha", "timing": "Preventivo antes de lluvias", "brands": ["Ridomil", "Curzate", "Dithane"] },
+    "prevention": "Variedades resistentes, no regar al atardecer, distancia adecuada entre plantas.",
+    "weather_risk": { "humidity_min_pct": 85, "temp_range_c": [15, 22], "rain_post_application_warn_hours": 18, "notes": "Lluvia y temp fresca son sus mejores aliados — fumigar preventivo ANTES de un frente." }
+  },
+  {
+    "common_name": "Pulgón verde",
+    "scientific_name": "Myzus persicae",
+    "affected_crops": ["papa", "tomate", "cítricos"],
+    "visual_signs": "Pulgones pequeños verdes en brotes y envés de hojas tiernas, hojas enrolladas, melaza, hormigas asociadas.",
+    "treatment_organic": { "method": "Aceite de neem", "ingredients": ["Neem"], "dosage": "5ml/L", "frequency": "Cada 5 días" },
+    "treatment_chemical": { "actives": ["Imidacloprid", "Acetamiprid"], "dosage_per_ha": "0.2 L/ha", "timing": "Al aparecer colonias", "brands": ["Confidor", "Mospilan"] },
+    "prevention": "Mariquitas (Coccinellidae), plantas trampa, control de hormigas (vectores).",
+    "weather_risk": { "humidity_min_pct": 60, "temp_range_c": [18, 25], "rain_post_application_warn_hours": 6 }
+  },
+  {
+    "common_name": "Antracnosis cítricos",
+    "scientific_name": "Colletotrichum gloeosporioides",
+    "affected_crops": ["cítricos"],
+    "visual_signs": "Manchas marrones hundidas en frutos, hojas con anillos concéntricos, ramitas con tizón.",
+    "treatment_organic": { "method": "Caldo sulfocálcico", "ingredients": ["Cal", "Azufre"], "dosage": "30ml/L", "frequency": "Mensual en época húmeda" },
+    "treatment_chemical": { "actives": ["Mancozeb", "Tebuconazol"], "dosage_per_ha": "2 kg/ha", "timing": "Pre-floración y post-cosecha", "brands": ["Dithane", "Folicur"] },
+    "prevention": "Poda de ramas enfermas, drenaje del suelo, no fertilizar con exceso de nitrógeno.",
+    "weather_risk": { "humidity_min_pct": 80, "temp_range_c": [22, 30], "rain_post_application_warn_hours": 24 }
+  },
+  {
+    "common_name": "Cochinilla harinosa",
+    "scientific_name": "Planococcus citri",
+    "affected_crops": ["cítricos", "tomate"],
+    "visual_signs": "Insectos cubiertos de polvo blanco céreo, en racimos en axilas de hojas y frutos. Melaza y fumagina.",
+    "treatment_organic": { "method": "Alcohol al 70% + jabón", "ingredients": ["Alcohol", "Jabón neutro"], "dosage": "100ml alcohol + 5ml jabón/L", "frequency": "Aplicación directa sobre colonias" },
+    "treatment_chemical": { "actives": ["Buprofezin", "Spirotetramat"], "dosage_per_ha": "0.5 L/ha", "timing": "Ninfas L1-L2", "brands": ["Applaud", "Movento"] },
+    "prevention": "Control de hormigas, fauna auxiliar (Chrysoperla, Cryptolaemus).",
+    "weather_risk": { "humidity_min_pct": 0, "temp_range_c": [24, 32], "rain_post_application_warn_hours": 6 }
+  },
+  {
+    "common_name": "Mildiú velloso",
+    "scientific_name": "Peronospora destructor",
+    "affected_crops": ["cebolla"],
+    "visual_signs": "Manchas amarillentas ovaladas en hojas, con vello violáceo grisáceo en envés, hojas se doblan y mueren.",
+    "treatment_organic": { "method": "Bicarbonato sódico", "ingredients": ["Bicarbonato", "Jabón neutro"], "dosage": "5g/L + 2ml jabón", "frequency": "Cada 7 días preventivo" },
+    "treatment_chemical": { "actives": ["Mancozeb", "Fosetil-Al"], "dosage_per_ha": "2.5 kg/ha", "timing": "Preventivo en alta humedad", "brands": ["Dithane", "Aliette"] },
+    "prevention": "Riego matinal, ventilación, variedades resistentes, drenaje.",
+    "weather_risk": { "humidity_min_pct": 85, "temp_range_c": [12, 22], "rain_post_application_warn_hours": 18, "notes": "Le encanta el rocío de la mañana." }
+  },
+  {
+    "common_name": "Trips",
+    "scientific_name": "Frankliniella occidentalis",
+    "affected_crops": ["tomate", "cebolla", "soya"],
+    "visual_signs": "Insectos diminutos amarillentos, hojas con manchas plateadas y puntos negros, deformación de brotes, transmiten virus.",
+    "treatment_organic": { "method": "Trampas azules + extracto de ajo", "ingredients": ["Ajo", "Agua"], "dosage": "50g/L macerado", "frequency": "Cada 5 días" },
+    "treatment_chemical": { "actives": ["Spinosad", "Spinetoram"], "dosage_per_ha": "0.2 L/ha", "timing": "Adultos y ninfas", "brands": ["Tracer", "Delegate"] },
+    "prevention": "Trampas azules adhesivas, ácaros depredadores (Amblyseius), eliminar malezas.",
+    "weather_risk": { "humidity_min_pct": 0, "temp_range_c": [22, 30], "rain_post_application_warn_hours": 8 }
+  }
+]

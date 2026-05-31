@@ -42,3 +42,18 @@ backend/*.log
 # Test artifacts
 coverage/
 *.lcov
+
+# Vita — SQLite local + storage filesystem
+# Cada developer regenera su propia BD al primer arranque desde sql/seed-pests.json
+web-admin/vita.db
+web-admin/vita.db-shm
+web-admin/vita.db-wal
+web-admin/storage/
+
+# Antes del rebrand teníamos agroscan.db
+web-admin/agroscan.db*
+
+# Cache local de tsbuildinfo
+web-admin/tsconfig.tsbuildinfo
+web-admin/.next/
+

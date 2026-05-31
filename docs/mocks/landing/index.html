@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AgroScan · Mocks de landing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300..700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0f0f10;
+    --panel: #18181a;
+    --line: rgba(255,255,255,0.10);
+    --text: #f3f1ec;
+    --mute: rgba(243,241,236,0.55);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+  body {
+    font-family: 'Geist', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1220px; margin: 0 auto; padding: 60px 32px 80px; }
+  header { margin-bottom: 48px; }
+  .kicker {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--mute);
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 64px);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin: 0 0 16px;
+  }
+  h1 em { font-style: italic; color: #C8731F; }
+  .lede { max-width: 620px; color: var(--mute); font-size: 16px; }
+
+  .grid {
+    margin-top: 64px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    display: block;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text);
+    transition: transform .3s, border-color .25s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.22); }
+  .card__preview {
+    aspect-ratio: 4/3;
+    position: relative;
+    overflow: hidden;
+  }
+  .card__body { padding: 22px 24px 26px; }
+  .card__tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--mute);
+    margin-bottom: 10px;
+  }
+  .card__title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 26px;
+    letter-spacing: -0.015em;
+    margin: 0 0 8px;
+    line-height: 1.1;
+  }
+  .card__desc { font-size: 13.5px; color: var(--mute); line-height: 1.5; }
+  .card__cta {
+    margin-top: 18px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--text);
+  }
+  .card__cta::after { content: '→'; }
+
+  /* ── A preview ── */
+  .prev-a {
+    background: #F2EBDC;
+    color: #1F2A1A;
+    padding: 28px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .prev-a__top {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #5C6B4F;
+    border-bottom: 1px solid rgba(31,42,26,0.18);
+    padding-bottom: 10px;
+  }
+  .prev-a__title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 38px;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+  }
+  .prev-a__title em { font-style: italic; color: #A95C12; }
+  .prev-a__leaf {
+    margin-top: auto;
+    align-self: flex-end;
+    width: 72px; height: 90px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #5b6a3e, #1a2412);
+    position: relative;
+  }
+  .prev-a__leaf::after {
+    content: ''; position: absolute;
+    top: 30%; left: 30%;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: #C8731F;
+    box-shadow:
+      18px 14px 0 -3px #C8731F,
+      -6px 26px 0 -4px #C8731F;
+  }
+
+  /* ── B preview ── */
+  .prev-b {
+    background: #0E1F14;
+    padding: 18px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+    color: #EFE7D2;
+    font-family: 'Geist', sans-serif;
+  }
+  .prev-b__c {
+    background: #122A1B;
+    border: 1px solid rgba(239,231,210,0.12);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 9px;
+  }
+  .prev-b__c.hero {
+    grid-row: 1 / span 2;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .prev-b__c.hero .t {
+    font-size: 22px; font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .prev-b__c.hero .t em {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: #D88340;
+  }
+  .prev-b__c.demo {
+    background: #213F2A;
+    position: relative;
+    overflow: hidden;
+  }
+  .prev-b__c.demo::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, transparent 49%, rgba(216,131,64,0.8) 50%, transparent 51%);
+    background-size: 100% 100%;
+    background-position: center 50%;
+    animation: pscan 2.6s linear infinite;
+  }
+  @keyframes pscan { 0% { background-position: center 0%; } 100% { background-position: center 100%; } }
+  .prev-b__c.stat {
+    text-align: left;
+  }
+  .prev-b__c.stat .pct {
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-top: 8px;
+  }
+  .prev-b__c.stat .lbl {
+    font-family: 'Geist Mono', monospace;
+    font-size: 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: rgba(239,231,210,0.5);
+  }
+
+  /* ── C preview ── */
+  .prev-c {
+    background: #ECE9E2;
+    color: #0A0A0A;
+    padding: 0;
+    display: flex; flex-direction: column;
+    background-image:
+      linear-gradient(rgba(10,10,10,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(10,10,10,0.06) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  .prev-c__bar {
+    background: #0A0A0A;
+    color: #ECE9E2;
+    padding: 6px 14px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    display: flex; justify-content: space-between;
+  }
+  .prev-c__bar .live { color: #00FF66; }
+  .prev-c__main {
+    flex: 1;
+    padding: 18px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .prev-c__t {
+    font-family: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 42px;
+    line-height: 0.82;
+    letter-spacing: -0.02em;
+  }
+  .prev-c__t .alert { color: #FF5A1F; }
+  .prev-c__t .hi { background: #00FF66; padding: 0 6px; }
+  .prev-c__sub {
+    margin-top: 12px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(10,10,10,0.6);
+  }
+
+  footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--mute);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    display: flex; justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="kicker">AgroScan · Mocks de landing · 2026-05-30</div>
+      <h1>Tres direcciones para <em>la misma idea.</em></h1>
+      <p class="lede">
+        Tres landing pages distintas con el mismo contenido y arquitectura
+        (hero, demo, impacto, cifras SCZ, mapa de focos, CTA cooperativas, footer).
+        Cambia el carácter visual: tipografía, paleta, ritmo y mood.
+        Abrí cada una en pantalla completa para evaluar.
+      </p>
+    </header>
+
+    <div class="grid">
+
+      <a class="card" href="./mock-a-editorial.html">
+        <div class="card__preview prev-a">
+          <div class="prev-a__top">N° 01 · Diagnóstico · Edición Santa Cruz</div>
+          <div class="prev-a__title">El <em>agrónomo</em><br/>que cabe en<br/>tu bolsillo.</div>
+          <div class="prev-a__leaf"></div>
+        </div>
+        <div class="card__body">
+          <div class="card__tag">Opción A · Editorial</div>
+          <h3 class="card__title">Editorial de campo</h3>
+          <p class="card__desc">Serif display, crema + oliva + saffron. Estilo revista agronómica. Calmo, autoritario, premium.</p>
+          <span class="card__cta">Abrir mock</span>
+        </div>
+      </a>
+
+      <a class="card" href="./mock-b-bento.html">
+        <div class="card__preview prev-b">
+          <div class="prev-b__c hero">
+            <div class="t">Diagnostica plagas<br/><em>con una foto.</em></div>
+            <div style="font-family:'Geist Mono',monospace; font-size:7px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(239,231,210,0.5)">12s · 30 plagas · 5 cultivos</div>
+          </div>
+          <div class="prev-b__c demo"></div>
+          <div class="prev-b__c stat">
+            <div class="lbl">precisión</div>
+            <div class="pct">87%</div>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="card__tag">Opción B · Bento</div>
+          <h3 class="card__title">Bento botánico</h3>
+          <p class="card__desc">Grid modular en verde profundo + cream + cobre. Modo SaaS técnico cálido. Muestra el producto vivo sin scroll.</p>
+          <span class="card__cta">Abrir mock</span>
+        </div>
+      </a>
+
+      <a class="card" href="./mock-c-brutalist.html">
+        <div class="card__preview prev-c">
+          <div class="prev-c__bar">
+            <span>AGROSCAN · DOSSIER 01</span>
+            <span class="live">● LIVE</span>
+          </div>
+          <div class="prev-c__main">
+            <div class="prev-c__t">IDENTIFICÁ<br/>LA <span class="hi">PLAGA.</span><br/>FUMIGÁ <span class="alert">LO JUSTO.</span></div>
+            <div class="prev-c__sub">§ 01 · CASO 089-A · SCZ</div>
+          </div>
+        </div>
+        <div class="card__body">
+          <div class="card__tag">Opción C · Brutalismo</div>
+          <h3 class="card__title">Brutalismo agrícola</h3>
+          <p class="card__desc">Big Shoulders condensed + IBM Plex Mono. Off-white industrial + negro + verde señal + naranja alerta. Confrontacional.</p>
+          <span class="card__cta">Abrir mock</span>
+        </div>
+      </a>
+
+    </div>
+
+    <footer>
+      <span>AgroScan · 3 mocks · paths relativos</span>
+      <span>Pantalla completa recomendada</span>
+    </footer>
+  </div>
+</body>
+</html>

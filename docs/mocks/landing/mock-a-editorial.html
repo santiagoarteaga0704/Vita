@@ -1,0 +1,992 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AgroScan · N° 01 — Edición Santa Cruz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,30..100,0..1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cream: #F2EBDC;
+    --cream-deep: #E8DEC6;
+    --olive: #1F2A1A;
+    --olive-soft: #2F3D27;
+    --olive-mute: #5C6B4F;
+    --saffron: #C8731F;
+    --saffron-deep: #A95C12;
+    --rule: rgba(31, 42, 26, 0.18);
+    --shadow: 0 1px 0 rgba(31,42,26,0.06), 0 30px 60px -40px rgba(31,42,26,0.4);
+    --grain-url: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.16  0 0 0 0 0.10  0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--cream); color: var(--olive); }
+  body {
+    font-family: 'Geist', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    font-feature-settings: 'ss01' on, 'cv11' on;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    background-image: var(--grain-url);
+    background-size: 240px 240px;
+  }
+  .serif { font-family: 'Fraunces', 'Times New Roman', serif; font-feature-settings: 'ss01' on, 'liga' on; }
+  .mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+  .container { max-width: 1320px; margin: 0 auto; padding: 0 40px; }
+  @media (max-width: 720px) { .container { padding: 0 22px; } }
+
+  /* ────────────── TOP STRIP ────────────── */
+  .topstrip {
+    border-bottom: 1px solid var(--rule);
+    background: var(--cream);
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(8px);
+    background: color-mix(in oklab, var(--cream) 92%, transparent);
+  }
+  .topstrip__inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 0;
+  }
+  .brand {
+    display: flex; align-items: baseline; gap: 14px;
+    text-decoration: none; color: var(--olive);
+  }
+  .brand__mark {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    font-style: italic;
+  }
+  .brand__sep { width: 1px; height: 16px; background: var(--rule); }
+  .brand__issue {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--olive-mute);
+  }
+  .nav { display: flex; gap: 36px; align-items: center; }
+  .nav a {
+    color: var(--olive);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    position: relative;
+  }
+  .nav a:hover { color: var(--saffron-deep); }
+  .nav a::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -6px;
+    height: 1px; background: var(--saffron);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .nav a:hover::after { transform: scaleX(1); }
+  .nav__cta {
+    padding: 8px 16px;
+    border: 1px solid var(--olive);
+    border-radius: 999px;
+    transition: background .25s, color .25s;
+  }
+  .nav__cta:hover { background: var(--olive); color: var(--cream); }
+  .nav__cta:hover::after { display: none; }
+  @media (max-width: 860px) { .nav { display: none; } }
+
+  /* ────────────── HERO ────────────── */
+  .hero {
+    padding: 64px 0 80px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .hero__meta {
+    display: flex; align-items: center; gap: 16px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--olive-mute);
+    margin-bottom: 48px;
+  }
+  .hero__meta::after {
+    content: ''; flex: 1; height: 1px; background: var(--rule);
+  }
+  .hero__grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 56px;
+    align-items: end;
+  }
+  @media (max-width: 980px) {
+    .hero__grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+  .hero__headline {
+    font-family: 'Fraunces', serif;
+    font-weight: 350;
+    font-size: clamp(56px, 9vw, 132px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: var(--olive);
+    margin: 0;
+    font-variation-settings: 'opsz' 144, 'SOFT' 50, 'WONK' 1;
+  }
+  .hero__headline em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--saffron-deep);
+    font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+  }
+  .hero__word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(28px);
+    animation: rise .9s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .hero__word:nth-child(1) { animation-delay: .05s; }
+  .hero__word:nth-child(2) { animation-delay: .15s; }
+  .hero__word:nth-child(3) { animation-delay: .25s; }
+  .hero__word:nth-child(4) { animation-delay: .35s; }
+  .hero__word:nth-child(5) { animation-delay: .45s; }
+  .hero__word:nth-child(6) { animation-delay: .55s; }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+  .hero__lede {
+    margin-top: 36px;
+    max-width: 460px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--olive-soft);
+  }
+  .hero__rule {
+    width: 56px; height: 1px; background: var(--olive);
+    margin: 28px 0 28px;
+  }
+  .hero__ctas {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    margin-top: 36px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 16px 26px;
+    border-radius: 999px;
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .25s, background .25s, color .25s, box-shadow .25s;
+  }
+  .btn--primary {
+    background: var(--olive);
+    color: var(--cream);
+    border: 1px solid var(--olive);
+  }
+  .btn--primary:hover {
+    background: var(--saffron-deep);
+    border-color: var(--saffron-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 30px -16px rgba(168,92,18,0.6);
+  }
+  .btn--ghost {
+    background: transparent;
+    color: var(--olive);
+    border: 1px solid var(--rule);
+  }
+  .btn--ghost:hover { border-color: var(--olive); }
+  .btn__arrow {
+    width: 8px; height: 8px;
+    border-top: 1.5px solid currentColor;
+    border-right: 1.5px solid currentColor;
+    transform: rotate(45deg);
+  }
+
+  /* ────────────── HERO PLATE (right column) ────────────── */
+  .plate {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    background: linear-gradient(180deg, #5b6a3e 0%, #2f3d27 60%, #1a2412 100%);
+  }
+  .plate__leaf {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 40% 60%, rgba(255,255,255,0.10), transparent 55%),
+      radial-gradient(ellipse at 75% 40%, rgba(200,115,31,0.18), transparent 50%);
+  }
+  .plate svg.leaf {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+  }
+  .plate__caption {
+    position: absolute; left: 24px; right: 24px; bottom: 22px;
+    color: var(--cream);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    display: flex; justify-content: space-between; align-items: end;
+    gap: 16px;
+  }
+  .plate__caption strong {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14px;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    display: block;
+    color: var(--cream);
+  }
+  .plate__corner {
+    position: absolute; top: 18px; left: 18px;
+    width: 28px; height: 28px;
+    border-top: 1px solid rgba(242,235,220,0.6);
+    border-left: 1px solid rgba(242,235,220,0.6);
+  }
+  .plate__corner.tr { left: auto; right: 18px; border-left: none; border-right: 1px solid rgba(242,235,220,0.6); }
+  .plate__corner.bl { top: auto; bottom: 18px; border-top: none; border-bottom: 1px solid rgba(242,235,220,0.6); }
+  .plate__corner.br { top: auto; bottom: 18px; left: auto; right: 18px; border-top: none; border-left: none; border-bottom: 1px solid rgba(242,235,220,0.6); border-right: 1px solid rgba(242,235,220,0.6); }
+  .plate__chip {
+    position: absolute; top: 22px; right: 22px;
+    padding: 6px 12px;
+    background: rgba(242,235,220,0.92);
+    color: var(--olive);
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border-radius: 999px;
+  }
+
+  /* ────────────── SECTION HEAD ────────────── */
+  section { padding: 96px 0; border-bottom: 1px solid var(--rule); }
+  .kicker {
+    display: flex; align-items: center; gap: 20px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--olive-mute);
+    margin-bottom: 40px;
+  }
+  .kicker::before {
+    content: '§';
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--saffron-deep);
+    letter-spacing: 0;
+  }
+  .kicker::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 350;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin: 0 0 56px;
+    max-width: 900px;
+    font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  }
+  .section-title em { font-style: italic; color: var(--saffron-deep); }
+
+  /* ────────────── CÓMO FUNCIONA ────────────── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+  .step {
+    background: var(--cream);
+    padding: 36px 32px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .step__num {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 48px;
+    color: var(--saffron-deep);
+    line-height: 1;
+    font-variation-settings: 'opsz' 144, 'SOFT' 100;
+  }
+  .step__name {
+    margin-top: 4px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--olive-mute);
+  }
+  .step__viz {
+    margin-top: 28px;
+    aspect-ratio: 4/3;
+    border-radius: 2px;
+    background: var(--cream-deep);
+    border: 1px solid var(--rule);
+    display: grid; place-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .step__viz svg { width: 70%; height: 70%; }
+  .step__title {
+    margin: 22px 0 8px;
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 26px;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+  }
+  .step__body {
+    color: var(--olive-soft);
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+
+  /* mini scan animation in step 2 */
+  .scanline {
+    position: absolute; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--saffron) 50%, transparent);
+    animation: scan 2.4s linear infinite;
+    opacity: 0.9;
+  }
+  @keyframes scan {
+    0% { top: 0; }
+    50% { top: calc(100% - 2px); }
+    100% { top: 0; }
+  }
+
+  /* ────────────── TRIPLE IMPACTO ────────────── */
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 64px; }
+  @media (max-width: 860px) { .pillars { grid-template-columns: 1fr; gap: 40px; } }
+  .pillar__icon { width: 36px; height: 36px; color: var(--olive); margin-bottom: 28px; }
+  .pillar__label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--olive-mute);
+    margin-bottom: 14px;
+  }
+  .pillar__rule { width: 32px; height: 1px; background: var(--olive); margin-bottom: 22px; }
+  .pillar__title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 18px;
+  }
+  .pillar__metric {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 72px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--saffron-deep);
+    margin-top: 28px;
+    font-variation-settings: 'opsz' 144, 'SOFT' 100;
+  }
+  .pillar__metric small {
+    display: block;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    color: var(--olive-mute);
+    font-family: 'Geist Mono', monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  /* ────────────── BANDA CIFRAS ────────────── */
+  .band {
+    background: var(--olive);
+    color: var(--cream);
+    border-top: 1px solid var(--olive);
+    border-bottom: 1px solid var(--olive);
+    padding: 110px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .band::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: var(--grain-url);
+    opacity: 0.4;
+    mix-blend-mode: overlay;
+  }
+  .band__title {
+    font-family: 'Fraunces', serif;
+    font-weight: 350;
+    font-style: italic;
+    font-size: clamp(28px, 3.5vw, 44px);
+    line-height: 1.1;
+    max-width: 760px;
+    margin: 0 0 70px;
+    font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  }
+  .band__grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 64px;
+    position: relative;
+  }
+  @media (max-width: 860px) { .band__grid { grid-template-columns: 1fr; } }
+  .band__cell { border-top: 1px solid rgba(242,235,220,0.25); padding-top: 28px; }
+  .band__num {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(60px, 8vw, 112px);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    color: var(--cream);
+    font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  }
+  .band__lbl {
+    margin-top: 16px;
+    font-size: 14px;
+    color: rgba(242,235,220,0.75);
+    line-height: 1.45;
+    max-width: 240px;
+  }
+  .band__src {
+    margin-top: 56px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(242,235,220,0.55);
+  }
+
+  /* ────────────── MAPA FOCOS ────────────── */
+  .map-section { padding: 96px 0; }
+  .map-grid {
+    display: grid; grid-template-columns: 1.7fr 1fr; gap: 40px;
+    align-items: stretch;
+  }
+  @media (max-width: 960px) { .map-grid { grid-template-columns: 1fr; } }
+  .map-card {
+    position: relative;
+    aspect-ratio: 5/4;
+    border-radius: 2px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #e8dec6 0%, #d9caa5 100%);
+    border: 1px solid var(--rule);
+  }
+  .map-card svg { width: 100%; height: 100%; display: block; }
+  .map-card .pulse {
+    transform-origin: center;
+    animation: pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { r: 6; opacity: 0.95; }
+    50% { r: 13; opacity: 0.4; }
+  }
+  .map-card__legend {
+    position: absolute; top: 18px; left: 18px;
+    padding: 10px 14px;
+    background: rgba(242,235,220,0.92);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--olive);
+  }
+  .map-card__legend .live {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--saffron);
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+    animation: blink 1.4s infinite;
+  }
+  @keyframes blink { 50% { opacity: 0.3; } }
+  .focos { list-style: none; padding: 0; margin: 0; }
+  .focos li {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .focos li:first-child { border-top: 1px solid var(--rule); }
+  .focos__name {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+  .focos__name span {
+    display: block;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--olive-mute);
+    margin-top: 2px;
+  }
+  .focos__count {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 42px;
+    color: var(--saffron-deep);
+    font-variation-settings: 'opsz' 144, 'SOFT' 100;
+  }
+
+  /* ────────────── COOPS CTA ────────────── */
+  .cta {
+    padding: 120px 0;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(200,115,31,0.10), transparent 60%),
+      var(--cream);
+  }
+  .cta__pre {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--olive-mute);
+    margin-bottom: 28px;
+  }
+  .cta__title {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(40px, 6vw, 80px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin: 0 auto 28px;
+    max-width: 880px;
+    font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  }
+  .cta__title em { font-style: italic; color: var(--saffron-deep); }
+  .cta__lede {
+    max-width: 540px; margin: 0 auto 40px;
+    font-size: 17px; color: var(--olive-soft);
+  }
+
+  /* ────────────── FOOTER ────────────── */
+  footer {
+    background: var(--cream);
+    border-top: 1px solid var(--rule);
+    padding: 72px 0 28px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 1.5fr repeat(3, 1fr);
+    gap: 48px;
+  }
+  @media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  .footer__mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 1;
+  }
+  .footer__tag {
+    margin-top: 16px;
+    max-width: 280px;
+    font-size: 13px;
+    color: var(--olive-mute);
+    line-height: 1.55;
+  }
+  .footer__col h5 {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--olive-mute);
+    margin: 0 0 18px;
+  }
+  .footer__col a {
+    display: block;
+    color: var(--olive);
+    text-decoration: none;
+    padding: 5px 0;
+    font-size: 14px;
+  }
+  .footer__col a:hover { color: var(--saffron-deep); }
+  .footer__bottom {
+    margin-top: 64px;
+    padding-top: 22px;
+    border-top: 1px solid var(--rule);
+    display: flex; justify-content: space-between;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--olive-mute);
+  }
+
+  /* SVG icons */
+  .ico { fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+
+<!-- ────────────── TOP STRIP ────────────── -->
+<div class="topstrip">
+  <div class="container topstrip__inner">
+    <a href="#" class="brand">
+      <span class="brand__mark">Agroscan</span>
+      <span class="brand__sep"></span>
+      <span class="brand__issue">N° 01 · Edición Santa Cruz</span>
+    </a>
+    <nav class="nav">
+      <a href="#como">Cómo funciona</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#coops">Cooperativas</a>
+      <a href="#" class="nav__cta">Iniciar sesión</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ────────────── HERO ────────────── -->
+<header class="hero">
+  <div class="container">
+    <div class="hero__meta">
+      <span>Diagnóstico de plagas</span>
+      <span>·</span>
+      <span>2026</span>
+    </div>
+
+    <div class="hero__grid">
+      <div>
+        <h1 class="hero__headline">
+          <span class="hero__word">El</span>
+          <span class="hero__word"><em>agrónomo</em></span>
+          <span class="hero__word">que</span>
+          <span class="hero__word">cabe</span>
+          <span class="hero__word">en tu</span>
+          <span class="hero__word">bolsillo.</span>
+        </h1>
+
+        <div class="hero__rule"></div>
+
+        <p class="hero__lede">
+          Sacá una foto a la hoja afectada y AgroScan identifica la plaga,
+          su severidad y el tratamiento exacto en menos de quince segundos.
+          Sin agrónomo de turno. Sin señal. Sin equivocarte.
+        </p>
+
+        <div class="hero__ctas">
+          <a class="btn btn--primary" href="#">Descargar la app <span class="btn__arrow"></span></a>
+          <a class="btn btn--ghost" href="#">Acceso panel cooperativa</a>
+        </div>
+      </div>
+
+      <!-- Plate / leaf illustration -->
+      <div class="plate" aria-hidden="true">
+        <div class="plate__leaf"></div>
+        <svg class="leaf" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#7d8c52" stop-opacity="0.95"/>
+              <stop offset="1" stop-color="#3a472a" stop-opacity="0.9"/>
+            </linearGradient>
+            <radialGradient id="spot" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#c8731f" stop-opacity="0.85"/>
+              <stop offset="0.4" stop-color="#a95c12" stop-opacity="0.5"/>
+              <stop offset="1" stop-color="#5b2f06" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <!-- main leaf shape -->
+          <path d="M 200 40
+                   C 90 60, 30 200, 70 340
+                   C 100 440, 200 470, 260 440
+                   C 360 380, 370 220, 320 120
+                   C 290 60, 240 30, 200 40 Z"
+                fill="url(#lg1)" />
+          <!-- midvein -->
+          <path d="M 200 50 Q 210 240 220 460" stroke="#dfe2c5" stroke-width="1.4" stroke-opacity="0.55" fill="none"/>
+          <!-- side veins -->
+          <g stroke="#dfe2c5" stroke-opacity="0.35" fill="none" stroke-width="1">
+            <path d="M 210 120 Q 150 130 100 170"/>
+            <path d="M 214 180 Q 140 200 80 240"/>
+            <path d="M 218 240 Q 130 270 75 310"/>
+            <path d="M 218 300 Q 140 330 100 380"/>
+            <path d="M 212 100 Q 270 110 320 130"/>
+            <path d="M 215 170 Q 290 190 350 200"/>
+            <path d="M 218 230 Q 300 250 350 270"/>
+            <path d="M 218 290 Q 290 320 330 360"/>
+          </g>
+          <!-- rust pustules (roya) -->
+          <g>
+            <circle cx="140" cy="220" r="22" fill="url(#spot)"/>
+            <circle cx="180" cy="290" r="14" fill="url(#spot)"/>
+            <circle cx="260" cy="200" r="18" fill="url(#spot)"/>
+            <circle cx="220" cy="350" r="20" fill="url(#spot)"/>
+            <circle cx="120" cy="320" r="10" fill="url(#spot)"/>
+            <circle cx="300" cy="280" r="12" fill="url(#spot)"/>
+          </g>
+        </svg>
+
+        <span class="plate__corner"></span>
+        <span class="plate__corner tr"></span>
+        <span class="plate__corner bl"></span>
+        <span class="plate__corner br"></span>
+
+        <span class="plate__chip">Pl. I — Soya / Roya</span>
+
+        <div class="plate__caption">
+          <span>Phakopsora pachyrhizi</span>
+          <strong>Cuatro Cañadas, 03:24 PM</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ────────────── CÓMO FUNCIONA ────────────── -->
+<section id="como">
+  <div class="container">
+    <div class="kicker"><span>Cómo</span></div>
+    <h2 class="section-title">Una foto. Doce segundos. <em>Una decisión.</em></h2>
+
+    <div class="steps">
+      <article class="step">
+        <div class="step__num">i.</div>
+        <div class="step__name">Enfocá</div>
+        <div class="step__viz">
+          <svg viewBox="0 0 200 150" class="ico" aria-hidden="true">
+            <rect x="20" y="35" width="160" height="100" rx="8"/>
+            <circle cx="100" cy="85" r="28"/>
+            <circle cx="100" cy="85" r="14"/>
+            <rect x="80" y="20" width="40" height="20" rx="4"/>
+            <circle cx="155" cy="55" r="2.5" fill="currentColor"/>
+          </svg>
+        </div>
+        <h3 class="step__title">Acercá la hoja afectada al centro del cuadro.</h3>
+        <p class="step__body">La app guía el encuadre y avisa si la foto tiene mala luz, está movida o muy lejos.</p>
+      </article>
+
+      <article class="step">
+        <div class="step__num">ii.</div>
+        <div class="step__name">Analiza</div>
+        <div class="step__viz" style="background: linear-gradient(180deg,#3a472a,#1f2a1a);">
+          <span class="scanline"></span>
+          <svg viewBox="0 0 200 150" aria-hidden="true">
+            <path d="M100 25 C50 35, 30 90, 60 120 C90 145, 140 135, 155 100 C170 60, 145 25, 100 25Z"
+                  fill="#7d8c52" opacity="0.85"/>
+            <path d="M100 30 Q 105 95 110 130" stroke="#dfe2c5" stroke-opacity="0.6" stroke-width="1.2" fill="none"/>
+            <circle cx="80" cy="80" r="9" fill="#c8731f" opacity="0.85"/>
+            <circle cx="125" cy="65" r="6" fill="#c8731f" opacity="0.85"/>
+            <circle cx="115" cy="110" r="7" fill="#c8731f" opacity="0.85"/>
+          </svg>
+        </div>
+        <h3 class="step__title">El modelo compara contra el catálogo curado.</h3>
+        <p class="step__body">Treinta plagas locales validadas por agrónomos del Oriente. No se inventa nada.</p>
+      </article>
+
+      <article class="step">
+        <div class="step__num">iii.</div>
+        <div class="step__name">Actuá</div>
+        <div class="step__viz" style="background:#fff7e6;">
+          <svg viewBox="0 0 200 150" class="ico" aria-hidden="true" style="color:#a95c12">
+            <rect x="20" y="22" width="160" height="106" rx="4"/>
+            <line x1="32" y1="46" x2="120" y2="46"/>
+            <line x1="32" y1="60" x2="170" y2="60"/>
+            <line x1="32" y1="74" x2="150" y2="74"/>
+            <rect x="32" y="92" width="60" height="22" rx="3" fill="currentColor"/>
+            <rect x="100" y="92" width="68" height="22" rx="3"/>
+          </svg>
+        </div>
+        <h3 class="step__title">Tratamiento orgánico y químico con dosis exacta.</h3>
+        <p class="step__body">Activos, marcas comerciales, momento óptimo y umbral económico. Listo para campo.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── TRIPLE IMPACTO ────────────── -->
+<section id="impacto">
+  <div class="container">
+    <div class="kicker"><span>Impacto</span></div>
+    <h2 class="section-title">Tres frentes a la vez. <em>Sin negociar ninguno.</em></h2>
+
+    <div class="pillars">
+      <article>
+        <svg class="pillar__icon ico" viewBox="0 0 36 36">
+          <path d="M18 4 C 10 12, 6 22, 12 32 C 18 24, 26 18, 32 12 C 26 8, 22 4, 18 4Z"/>
+          <path d="M16 24 Q 22 18 30 14"/>
+        </svg>
+        <div class="pillar__label">Ambiental</div>
+        <div class="pillar__rule"></div>
+        <h3 class="pillar__title">Menos agroquímicos<br/>mal aplicados.</h3>
+        <p>Diagnóstico preciso evita la fumigación a ciegas. Menos contaminación de pozos, suelos y aire en la cuenca de SCZ.</p>
+        <div class="pillar__metric">−40<small>uso reducido</small></div>
+      </article>
+
+      <article>
+        <svg class="pillar__icon ico" viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="12"/>
+          <path d="M14 19 L 17 22 L 24 14"/>
+        </svg>
+        <div class="pillar__label">Económico</div>
+        <div class="pillar__rule"></div>
+        <h3 class="pillar__title">Más rendimiento.<br/>Menos pérdida.</h3>
+        <p>El error de diagnóstico cuesta entre Bs 200 y Bs 800 por hectárea. AgroScan recupera rinde y ahorra insumos.</p>
+        <div class="pillar__metric">+800<small>Bs por hectárea</small></div>
+      </article>
+
+      <article>
+        <svg class="pillar__icon ico" viewBox="0 0 36 36">
+          <path d="M4 30 L 18 8 L 32 30 Z"/>
+          <path d="M14 30 L 14 22 L 22 22 L 22 30"/>
+        </svg>
+        <div class="pillar__label">Social</div>
+        <div class="pillar__rule"></div>
+        <h3 class="pillar__title">Acceso<br/>para todos.</h3>
+        <p>Hoy hay un agrónomo cada 800 productores. AgroScan democratiza el conocimiento técnico y baja intoxicaciones rurales.</p>
+        <div class="pillar__metric">1<small>agrónomo por productor</small></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── BANDA CIFRAS ────────────── -->
+<section class="band" style="padding:110px 0;">
+  <div class="container">
+    <h2 class="band__title">El problema en Santa Cruz no es la voluntad, <em>es la escala.</em></h2>
+    <div class="band__grid">
+      <div class="band__cell">
+        <div class="band__num">200.000</div>
+        <div class="band__lbl">productores agrícolas activos en el departamento de Santa Cruz.</div>
+      </div>
+      <div class="band__cell">
+        <div class="band__num">80<span style="font-size:0.55em">%</span></div>
+        <div class="band__lbl">diagnostica plagas a ojo, sin asistencia técnica formal.</div>
+      </div>
+      <div class="band__cell">
+        <div class="band__num">USD 50M</div>
+        <div class="band__lbl">perdidos al año por mal uso y sobre-aplicación de agroquímicos.</div>
+      </div>
+    </div>
+    <div class="band__src">Fuente · INE 2024 · INIAF · Cámara Agropecuaria del Oriente</div>
+  </div>
+</section>
+
+<!-- ────────────── MAPA FOCOS ────────────── -->
+<section class="map-section" id="catalogo">
+  <div class="container">
+    <div class="kicker"><span>Focos en vivo</span></div>
+    <h2 class="section-title">Lo que está pasando hoy, <em>cerca tuyo.</em></h2>
+
+    <div class="map-grid">
+      <div class="map-card">
+        <svg viewBox="0 0 600 480" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1F2A1A" stroke-opacity="0.06"/>
+            </pattern>
+          </defs>
+          <rect width="600" height="480" fill="url(#grid)"/>
+          <!-- Stylized SCZ silhouette -->
+          <path d="M 80 380 C 90 300, 70 240, 120 180 C 180 120, 280 100, 360 130 C 460 170, 510 240, 500 320 C 490 400, 410 430, 320 420 C 240 410, 130 430, 80 380 Z"
+                fill="#cdb98e" stroke="#1F2A1A" stroke-opacity="0.25" stroke-width="1.2"/>
+          <!-- river -->
+          <path d="M 130 200 Q 220 240 280 220 T 460 280" stroke="#5C6B4F" stroke-opacity="0.45" stroke-width="2" fill="none"/>
+
+          <!-- city labels -->
+          <g font-family="Geist Mono, monospace" font-size="9" fill="#1F2A1A" letter-spacing="1.2">
+            <text x="305" y="262">SANTA CRUZ</text>
+            <text x="165" y="222">WARNES</text>
+            <text x="395" y="178">CUATRO CAÑADAS</text>
+            <text x="225" y="350">PAILÓN</text>
+            <text x="125" y="320">LA GUARDIA</text>
+            <text x="450" y="350">SAN JULIÁN</text>
+          </g>
+
+          <!-- focos -->
+          <g fill="#C8731F">
+            <circle class="pulse" cx="420" cy="190" r="9"/>
+            <circle class="pulse" cx="290" cy="270" r="9" style="animation-delay:.4s"/>
+            <circle class="pulse" cx="240" cy="345" r="9" style="animation-delay:.8s"/>
+            <circle class="pulse" cx="470" cy="345" r="9" style="animation-delay:1.2s"/>
+            <circle class="pulse" cx="180" cy="230" r="9" style="animation-delay:1.6s"/>
+          </g>
+        </svg>
+        <div class="map-card__legend"><span class="live"></span> En vivo · 412 esta semana</div>
+      </div>
+
+      <ul class="focos">
+        <li>
+          <div class="focos__name">Roya asiática<span>Soya · Cuatro Cañadas</span></div>
+          <div class="focos__count">127</div>
+        </li>
+        <li>
+          <div class="focos__name">Chinche verde<span>Maíz · Pailón</span></div>
+          <div class="focos__count">84</div>
+        </li>
+        <li>
+          <div class="focos__name">Picudo<span>Algodón · San Julián</span></div>
+          <div class="focos__count">52</div>
+        </li>
+        <li>
+          <div class="focos__name">Mosca blanca<span>Sorgo · Warnes</span></div>
+          <div class="focos__count">38</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── COOPS CTA ────────────── -->
+<section class="cta" id="coops">
+  <div class="container">
+    <div class="cta__pre">— Para cooperativas · SENASAG · INIAF —</div>
+    <h2 class="cta__title">El panel donde <em>se ve todo</em> antes que en el campo.</h2>
+    <p class="cta__lede">
+      Mapa de focos, validación de diagnósticos, alertas zonales y exportes
+      para informar decisiones agronómicas a nivel de cooperativa o regional.
+    </p>
+    <a class="btn btn--primary" href="#">Solicitar acceso institucional <span class="btn__arrow"></span></a>
+  </div>
+</section>
+
+<!-- ────────────── FOOTER ────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer__mark">Agroscan</div>
+        <p class="footer__tag">Diagnóstico agronómico para Santa Cruz. Editado y mantenido en Bolivia.</p>
+      </div>
+      <div class="footer__col">
+        <h5>Producto</h5>
+        <a href="#">Descargar app</a>
+        <a href="#">Panel</a>
+        <a href="#">Catálogo</a>
+        <a href="#">Cooperativas</a>
+      </div>
+      <div class="footer__col">
+        <h5>Equipo</h5>
+        <a href="#">Quiénes somos</a>
+        <a href="#">Misión</a>
+        <a href="#">Aliados</a>
+      </div>
+      <div class="footer__col">
+        <h5>Contacto</h5>
+        <a href="mailto:hola@agroscan.bo">hola@agroscan.bo</a>
+        <a href="#">Santa Cruz, Bolivia</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 AgroScan · Edición Santa Cruz</span>
+      <span>Es · Español</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

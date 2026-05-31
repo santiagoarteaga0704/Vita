@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AgroScan · Bento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0E1F14;
+    --bg-deep: #081610;
+    --cream: #EFE7D2;
+    --cream-soft: rgba(239,231,210,0.62);
+    --cream-mute: rgba(239,231,210,0.34);
+    --copper: #B86A2E;
+    --copper-bright: #D88340;
+    --leaf: #7BA05B;
+    --leaf-bright: #9BC07A;
+    --line: rgba(239,231,210,0.10);
+    --line-strong: rgba(239,231,210,0.18);
+    --card: #122A1B;
+    --card-hi: #1A3823;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'Geist', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'ss01' on, 'cv11' on;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(123,160,91,0.10), transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(184,106,46,0.12), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container { max-width: 1320px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+  @media (max-width: 720px) { .container { padding: 0 18px; } }
+  .mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+  .serif { font-family: 'Instrument Serif', serif; font-style: italic; }
+
+  /* ────────────── NAV ────────────── */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in oklab, var(--bg) 86%, transparent);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav__inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 0;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--cream);
+  }
+  .brand__dot {
+    width: 18px; height: 18px;
+    background: var(--leaf);
+    border-radius: 4px;
+    position: relative;
+    transform: rotate(45deg);
+  }
+  .brand__dot::after {
+    content: ''; position: absolute; inset: 4px;
+    background: var(--copper-bright);
+    border-radius: 2px;
+  }
+  .brand__name { font-weight: 600; font-size: 17px; letter-spacing: -0.01em; }
+  .brand__ver {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--cream-mute);
+    border-left: 1px solid var(--line-strong);
+    padding-left: 10px;
+    margin-left: 6px;
+    letter-spacing: 0.1em;
+  }
+  .nav__links { display: flex; gap: 30px; align-items: center; }
+  .nav__links a {
+    color: var(--cream-soft);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color .2s;
+  }
+  .nav__links a:hover { color: var(--cream); }
+  .nav__cta {
+    padding: 9px 16px 9px 18px;
+    background: var(--cream);
+    color: var(--bg) !important;
+    border-radius: 8px;
+    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: transform .2s, background .2s;
+  }
+  .nav__cta:hover { background: var(--leaf-bright); transform: translateY(-1px); }
+  .nav__cta svg { width: 12px; height: 12px; }
+  @media (max-width: 860px) { .nav__links a:not(.nav__cta) { display: none; } }
+
+  /* ────────────── HERO BENTO ────────────── */
+  .hero { padding: 56px 0 32px; }
+  .ribbon {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 6px 12px 6px 8px;
+    background: rgba(123,160,91,0.10);
+    border: 1px solid rgba(123,160,91,0.32);
+    border-radius: 999px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--leaf-bright);
+    margin-bottom: 24px;
+  }
+  .ribbon .live-dot {
+    width: 7px; height: 7px;
+    background: var(--leaf-bright);
+    border-radius: 50%;
+    animation: blink 1.4s infinite;
+  }
+  @keyframes blink { 50% { opacity: 0.3; } }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 14px;
+  }
+  @media (max-width: 1080px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 720px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .35s cubic-bezier(.2,.7,.2,1), border-color .25s, background .25s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: var(--line-strong); }
+  .card__corner {
+    position: absolute; top: 16px; right: 16px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--cream-mute);
+    letter-spacing: 0.12em;
+  }
+
+  /* HERO card (big) */
+  .card--hero {
+    grid-column: 1; grid-row: 1 / span 2;
+    padding: 36px 36px 32px;
+    background:
+      radial-gradient(ellipse at 0% 100%, rgba(184,106,46,0.20), transparent 60%),
+      var(--card);
+    min-height: 580px;
+    display: flex; flex-direction: column;
+  }
+  @media (max-width: 1080px) {
+    .card--hero { grid-column: 1 / -1; grid-row: auto; min-height: auto; }
+  }
+  .card--hero h1 {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: clamp(40px, 5.5vw, 76px);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin: 0 0 24px;
+  }
+  .card--hero h1 em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--copper-bright);
+    letter-spacing: -0.01em;
+  }
+  .card--hero p {
+    color: var(--cream-soft);
+    font-size: 17px;
+    line-height: 1.5;
+    max-width: 420px;
+    margin: 0;
+  }
+  .card--hero .ctas { display: flex; gap: 10px; margin-top: 32px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 13px 22px;
+    border-radius: 10px;
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .2s, background .25s, border-color .25s, color .25s;
+    border: 1px solid transparent;
+  }
+  .btn--primary { background: var(--cream); color: var(--bg); }
+  .btn--primary:hover { background: var(--leaf-bright); transform: translateY(-1px); }
+  .btn--ghost {
+    background: transparent;
+    color: var(--cream);
+    border-color: var(--line-strong);
+  }
+  .btn--ghost:hover { border-color: var(--cream-soft); }
+  .btn svg { width: 14px; height: 14px; }
+
+  .hero__legend {
+    margin-top: auto;
+    padding-top: 36px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .hero__legend > div .n {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: 28px;
+    letter-spacing: -0.025em;
+    color: var(--cream);
+  }
+  .hero__legend > div .l {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--cream-mute);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* DEMO card */
+  .card--demo {
+    grid-column: 2; grid-row: 1;
+    background: linear-gradient(180deg, #1A3823 0%, #122A1B 100%);
+    overflow: hidden;
+    padding: 0;
+    display: flex; flex-direction: column;
+    min-height: 280px;
+  }
+  .card--demo .viz {
+    position: relative; flex: 1;
+    background: #213F2A;
+    overflow: hidden;
+  }
+  .card--demo .viz::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at center, rgba(123,160,91,0.4) 0%, transparent 60%);
+  }
+  .leafdemo {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%; height: 80%;
+  }
+  .scangrid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(239,231,210,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(239,231,210,0.06) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  .scanbar {
+    position: absolute; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--copper-bright), transparent);
+    box-shadow: 0 0 12px var(--copper-bright);
+    animation: scan 2.6s cubic-bezier(.4,0,.6,1) infinite;
+  }
+  @keyframes scan {
+    0%, 100% { top: 5%; }
+    50% { top: 95%; }
+  }
+  .targetbox {
+    position: absolute;
+    top: 30%; left: 40%;
+    width: 60px; height: 60px;
+    border: 1.5px solid var(--copper-bright);
+    border-radius: 6px;
+    animation: target-pulse 2.6s infinite;
+  }
+  .targetbox::before, .targetbox::after {
+    content: ''; position: absolute;
+    width: 10px; height: 10px;
+    border: 1.5px solid var(--copper-bright);
+  }
+  .targetbox::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+  .targetbox::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+  @keyframes target-pulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 0.4; }
+  }
+  .card--demo .meta {
+    padding: 20px 24px 22px;
+    border-top: 1px solid var(--line);
+    background: var(--card);
+  }
+  .card--demo .meta .l {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--cream-mute);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card--demo .meta .name {
+    font-weight: 500;
+    font-size: 18px;
+    letter-spacing: -0.015em;
+  }
+  .card--demo .meta .pct {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--copper-bright);
+    margin-top: 4px;
+  }
+
+  /* PRECISION card */
+  .card--precision {
+    grid-column: 3; grid-row: 1;
+    display: flex; flex-direction: column;
+  }
+  .card--precision .pct {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: 72px;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    color: var(--cream);
+    margin-top: auto;
+  }
+  .card--precision .pct sup {
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--cream-mute);
+    vertical-align: 22px;
+    margin-left: 4px;
+  }
+  .card--precision .bar {
+    margin-top: 24px;
+    height: 8px;
+    background: rgba(239,231,210,0.08);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .card--precision .bar > div {
+    height: 100%; width: 87%;
+    background: linear-gradient(90deg, var(--leaf), var(--leaf-bright));
+    border-radius: 999px;
+    animation: fillbar 1.5s cubic-bezier(.2,.7,.2,1) forwards;
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+  @keyframes fillbar { to { transform: scaleX(1); } }
+  .card--precision .l {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--cream-mute);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-top: 16px;
+  }
+  .card--precision h3 {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    margin: 12px 0 0;
+    line-height: 1.1;
+  }
+
+  /* MAP card */
+  .card--map {
+    grid-column: 2; grid-row: 2;
+    padding: 0;
+    overflow: hidden;
+    background: #1A3823;
+    min-height: 280px;
+  }
+  .card--map .head {
+    padding: 22px 24px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .card--map .head h4 {
+    font-weight: 500; font-size: 16px; margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .card--map .head .chip {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    background: rgba(184,106,46,0.18);
+    color: var(--copper-bright);
+    border: 1px solid rgba(184,106,46,0.4);
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.1em;
+  }
+  .card--map svg.mapsvg { width: 100%; height: 100%; display: block; }
+  .pulse-dot {
+    animation: pulse 2.4s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes pulse {
+    0%, 100% { r: 5; opacity: 0.95; }
+    50% { r: 11; opacity: 0.45; }
+  }
+
+  /* OFFLINE card */
+  .card--offline {
+    grid-column: 3; grid-row: 2;
+    background: linear-gradient(180deg, var(--card-hi), var(--card));
+  }
+  .card--offline .ico {
+    width: 28px; height: 28px;
+    color: var(--leaf-bright);
+    margin-bottom: 22px;
+  }
+  .card--offline h4 {
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+    line-height: 1.15;
+  }
+  .card--offline p {
+    margin: 0;
+    color: var(--cream-soft);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .card--offline .queue {
+    margin-top: 22px;
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    background: rgba(239,231,210,0.05);
+    border: 1px dashed var(--line-strong);
+    border-radius: 10px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--cream-soft);
+    letter-spacing: 0.04em;
+  }
+  .card--offline .queue::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--copper-bright);
+    border-radius: 2px;
+    animation: blink 1.4s infinite;
+  }
+
+  /* ────────────── SECTION ────────────── */
+  section {
+    padding: 100px 0 60px;
+    position: relative;
+  }
+  .section-head {
+    display: grid; grid-template-columns: auto 1fr; gap: 24px;
+    align-items: end;
+    margin-bottom: 56px;
+  }
+  .section-head .kicker {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--leaf-bright);
+    padding: 8px 12px;
+    border: 1px solid rgba(123,160,91,0.32);
+    background: rgba(123,160,91,0.08);
+    border-radius: 999px;
+    justify-self: start;
+    grid-column: 1; grid-row: 1;
+  }
+  .section-head h2 {
+    grid-column: 1 / -1; grid-row: 2;
+    font-weight: 500;
+    font-size: clamp(36px, 5vw, 60px);
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    margin: 0;
+    max-width: 920px;
+  }
+  .section-head h2 em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--copper-bright);
+    letter-spacing: -0.01em;
+  }
+
+  /* ────────────── IMPACTO ────────────── */
+  .impact-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+  @media (max-width: 860px) { .impact-grid { grid-template-columns: 1fr; } }
+  .impact {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 30px;
+    display: flex; flex-direction: column;
+    min-height: 320px;
+    transition: transform .35s, border-color .2s, background .25s;
+    overflow: hidden;
+    position: relative;
+  }
+  .impact:hover { transform: translateY(-3px); border-color: var(--line-strong); }
+  .impact__ico {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: rgba(123,160,91,0.14);
+    color: var(--leaf-bright);
+    display: grid; place-items: center;
+    margin-bottom: 20px;
+  }
+  .impact__ico svg { width: 22px; height: 22px; }
+  .impact__label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--cream-mute);
+    margin-bottom: 10px;
+  }
+  .impact h3 {
+    font-weight: 500;
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+    line-height: 1.15;
+  }
+  .impact p {
+    margin: 0;
+    color: var(--cream-soft);
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+  .impact__metric {
+    margin-top: auto;
+    padding-top: 28px;
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .impact__metric .n {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--copper-bright);
+  }
+  .impact__metric .u {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--cream-mute);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* ────────────── CIFRAS ────────────── */
+  .stats {
+    padding: 100px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-deep);
+  }
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px;
+  }
+  @media (max-width: 860px) { .stats-grid { grid-template-columns: 1fr; gap: 40px; } }
+  .stat .n {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: clamp(56px, 8vw, 96px);
+    line-height: 1;
+    letter-spacing: -0.045em;
+    color: var(--cream);
+    margin-bottom: 14px;
+  }
+  .stat .n sup {
+    font-size: 0.45em;
+    vertical-align: 30%;
+    color: var(--cream-mute);
+    font-weight: 400;
+  }
+  .stat .lbl {
+    color: var(--cream-soft);
+    font-size: 15px;
+    line-height: 1.45;
+    max-width: 280px;
+  }
+  .stats__source {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--cream-mute);
+  }
+
+  /* ────────────── CTA ────────────── */
+  .cta {
+    padding: 120px 0;
+  }
+  .cta-card {
+    background: linear-gradient(135deg, #1A3823 0%, #2A4F33 100%);
+    border: 1px solid var(--line-strong);
+    border-radius: 24px;
+    padding: 72px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-card::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(184,106,46,0.25), transparent 60%);
+  }
+  .cta-card .body {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 40px;
+    align-items: end;
+  }
+  @media (max-width: 860px) { .cta-card .body { grid-template-columns: 1fr; } }
+  .cta-card h2 {
+    font-weight: 500;
+    font-size: clamp(34px, 4.5vw, 52px);
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    margin: 0;
+  }
+  .cta-card h2 em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--copper-bright);
+  }
+  .cta-card p {
+    color: var(--cream-soft);
+    margin: 20px 0 32px;
+    max-width: 460px;
+    font-size: 16px;
+  }
+
+  /* ────────────── FOOTER ────────────── */
+  footer {
+    background: var(--bg-deep);
+    border-top: 1px solid var(--line);
+    padding: 72px 0 32px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+  }
+  @media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  .footer h5 {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--cream-mute);
+    margin: 0 0 18px;
+  }
+  .footer a {
+    display: block;
+    color: var(--cream-soft);
+    text-decoration: none;
+    padding: 5px 0;
+    font-size: 14px;
+  }
+  .footer a:hover { color: var(--cream); }
+  .footer__bot {
+    margin-top: 56px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--cream-mute);
+  }
+</style>
+</head>
+<body>
+
+<!-- ────────────── NAV ────────────── -->
+<nav class="nav">
+  <div class="container nav__inner">
+    <a href="#" class="brand">
+      <span class="brand__dot"></span>
+      <span class="brand__name">AgroScan</span>
+      <span class="brand__ver">v1.0 BO</span>
+    </a>
+    <div class="nav__links">
+      <a href="#producto">Producto</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#coops">Cooperativas</a>
+      <a href="#" class="nav__cta">
+        Entrar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ────────────── HERO BENTO ────────────── -->
+<section class="hero">
+  <div class="container">
+    <div class="ribbon">
+      <span class="live-dot"></span>
+      412 escaneos en Santa Cruz hoy
+    </div>
+
+    <div class="grid">
+
+      <!-- HERO CARD -->
+      <div class="card card--hero">
+        <span class="card__corner">01 / hero</span>
+        <h1>Diagnostica plagas <em>con una foto.</em></h1>
+        <p>
+          AgroScan identifica plagas y enfermedades de soya, maíz, sorgo y
+          algodón en doce segundos. Funciona sin red en plena chacra y devuelve
+          tratamiento orgánico y químico con dosis exacta.
+        </p>
+        <div class="ctas">
+          <a class="btn btn--primary" href="#">
+            Descargar app
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="#">Acceder al panel</a>
+        </div>
+
+        <div class="hero__legend">
+          <div>
+            <div class="n">12s</div>
+            <div class="l">tiempo medio</div>
+          </div>
+          <div>
+            <div class="n">30</div>
+            <div class="l">plagas en catálogo</div>
+          </div>
+          <div>
+            <div class="n">5</div>
+            <div class="l">cultivos SCZ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEMO CARD -->
+      <div class="card card--demo">
+        <div class="viz">
+          <div class="scangrid"></div>
+          <svg class="leafdemo" viewBox="0 0 200 240">
+            <path d="M100 20 C 40 30, 25 130, 50 200 C 80 240, 150 230, 170 180 C 190 110, 160 30, 100 20 Z"
+                  fill="#9BC07A" opacity="0.92"/>
+            <path d="M100 25 Q 108 130 115 220" stroke="#0E1F14" stroke-opacity="0.4" stroke-width="1.4" fill="none"/>
+            <circle cx="80" cy="100" r="8" fill="#B86A2E"/>
+            <circle cx="125" cy="135" r="6" fill="#B86A2E"/>
+            <circle cx="95" cy="160" r="7" fill="#B86A2E"/>
+            <circle cx="140" cy="90" r="5" fill="#B86A2E"/>
+          </svg>
+          <div class="targetbox"></div>
+          <div class="scanbar"></div>
+        </div>
+        <div class="meta">
+          <div class="l">resultado</div>
+          <div class="name">Roya asiática · soya</div>
+          <div class="pct">
+            <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3 5 L4.5 6.5 L7 4" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+            89% confianza · severidad media
+          </div>
+        </div>
+      </div>
+
+      <!-- PRECISION CARD -->
+      <div class="card card--precision">
+        <span class="card__corner">03 / IA</span>
+        <div class="l">Precisión validada</div>
+        <h3>Catálogo curado, no IA libre.</h3>
+        <div class="pct">87<sup>%</sup></div>
+        <div class="bar"><div></div></div>
+        <div class="l" style="margin-top: 18px;">Validado por agrónomos del Oriente</div>
+      </div>
+
+      <!-- MAP CARD -->
+      <div class="card card--map">
+        <div class="head">
+          <h4>Focos esta semana</h4>
+          <span class="chip">EN VIVO</span>
+        </div>
+        <svg class="mapsvg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice">
+          <path d="M 40 180 C 60 130, 50 80, 100 60 C 170 40, 280 50, 340 90 C 380 130, 360 180, 300 190 C 220 205, 80 200, 40 180 Z"
+                fill="#0E1F14" stroke="#7BA05B" stroke-opacity="0.3" stroke-width="1"/>
+          <path d="M 90 100 Q 180 130 240 110 T 350 140" stroke="#7BA05B" stroke-opacity="0.45" stroke-width="1.4" fill="none"/>
+          <g fill="#D88340">
+            <circle class="pulse-dot" cx="280" cy="100" r="5"/>
+            <circle class="pulse-dot" cx="220" cy="135" r="5" style="animation-delay:.5s"/>
+            <circle class="pulse-dot" cx="160" cy="120" r="5" style="animation-delay:1s"/>
+            <circle class="pulse-dot" cx="310" cy="160" r="5" style="animation-delay:1.5s"/>
+          </g>
+          <g font-family="Geist Mono, monospace" font-size="8" fill="#EFE7D2" fill-opacity="0.45" letter-spacing="1">
+            <text x="225" y="155">SCZ</text>
+            <text x="240" y="92">CUATRO C.</text>
+            <text x="180" y="138">PAILÓN</text>
+            <text x="320" y="178">SAN JULIÁN</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- OFFLINE CARD -->
+      <div class="card card--offline">
+        <span class="card__corner">05 / offline</span>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M3 13c0-3 3-7 9-7m0 0a9 9 0 019 9"/>
+          <circle cx="12" cy="18" r="1.5" fill="currentColor"/>
+          <path d="M3 3l18 18" stroke-width="1.8"/>
+        </svg>
+        <h4>Funciona sin señal.</h4>
+        <p>Capturás en la chacra, el escaneo queda en cola y se sincroniza cuando volvés a tener red.</p>
+        <div class="queue">1 escaneo en cola · sync al recuperar 4G</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── IMPACTO ────────────── -->
+<section id="producto">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker">Triple impacto</span>
+      <h2>Tres frentes a la vez. <em>Sin negociar ninguno.</em></h2>
+    </div>
+
+    <div class="impact-grid">
+      <article class="impact">
+        <div class="impact__ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c-4 4-6 8-3 13 3 5 9 5 12 0-3-2-6-6-9-13z"/><path d="M11 16l4-6"/></svg>
+        </div>
+        <div class="impact__label">Ambiental</div>
+        <h3>Menos agroquímicos mal aplicados.</h3>
+        <p>Diagnóstico preciso evita fumigación a ciegas. Menos contaminación de pozos y suelos en la cuenca de SCZ.</p>
+        <div class="impact__metric"><span class="n">−40<small>%</small></span><span class="u">uso reducido</span></div>
+      </article>
+
+      <article class="impact">
+        <div class="impact__ico" style="background:rgba(184,106,46,0.14);color:var(--copper-bright)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M9 12l2 2 4-5"/></svg>
+        </div>
+        <div class="impact__label">Económico</div>
+        <h3>Más rendimiento, menos pérdida.</h3>
+        <p>El mal diagnóstico cuesta entre Bs 200 y Bs 800 por hectárea. AgroScan recupera rinde y ahorra insumos.</p>
+        <div class="impact__metric"><span class="n">+800</span><span class="u">Bs / ha</span></div>
+      </article>
+
+      <article class="impact">
+        <div class="impact__ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 20l9-14 9 14"/><path d="M9 20v-5h6v5"/></svg>
+        </div>
+        <div class="impact__label">Social</div>
+        <h3>Acceso técnico para todos.</h3>
+        <p>Hoy hay un agrónomo cada 800 productores. AgroScan democratiza conocimiento y reduce intoxicaciones rurales.</p>
+        <div class="impact__metric"><span class="n">1 : 1</span><span class="u">agrónomo · productor</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── CIFRAS ────────────── -->
+<section class="stats">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker">El problema en cifras</span>
+      <h2>Santa Cruz no tiene un problema de voluntad, <em>tiene uno de escala.</em></h2>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="n">200K</div>
+        <div class="lbl">productores agrícolas activos en el departamento.</div>
+      </div>
+      <div class="stat">
+        <div class="n">80<sup>%</sup></div>
+        <div class="lbl">diagnostica plagas a ojo, sin asistencia técnica.</div>
+      </div>
+      <div class="stat">
+        <div class="n">$50M</div>
+        <div class="lbl">perdidos al año por mal uso de agroquímicos.</div>
+      </div>
+    </div>
+
+    <div class="stats__source">Fuente · INE 2024 · INIAF · Cámara Agropecuaria del Oriente</div>
+  </div>
+</section>
+
+<!-- ────────────── COOPS CTA ────────────── -->
+<section class="cta" id="coops">
+  <div class="container">
+    <div class="cta-card">
+      <div class="body">
+        <h2>El panel donde se ve todo<br/><em>antes que en el campo.</em></h2>
+        <div>
+          <p>Mapa de focos en vivo, validación de diagnósticos, alertas zonales push y exportes CSV para tu equipo técnico.</p>
+          <a class="btn btn--primary" href="#">
+            Solicitar acceso institucional
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── FOOTER ────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#" class="brand"><span class="brand__dot"></span><span class="brand__name">AgroScan</span></a>
+        <p style="color:var(--cream-soft); font-size:14px; max-width:300px; margin-top:18px;">
+          Diagnóstico agronómico construido en Santa Cruz, para Santa Cruz.
+        </p>
+      </div>
+      <div>
+        <h5>Producto</h5>
+        <a href="#">Descargar app</a>
+        <a href="#">Panel</a>
+        <a href="#">Catálogo</a>
+      </div>
+      <div>
+        <h5>Equipo</h5>
+        <a href="#">Nosotros</a>
+        <a href="#">Aliados</a>
+        <a href="#">Contacto</a>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+      </div>
+    </div>
+    <div class="footer__bot">
+      <span>© 2026 AgroScan</span>
+      <span>v1.0 — Santa Cruz, Bolivia</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

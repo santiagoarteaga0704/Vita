@@ -1,0 +1,1038 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AGROSCAN / DOSSIER 01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #ECE9E2;
+    --paper-deep: #DEDACE;
+    --ink: #0A0A0A;
+    --ink-soft: #2B2B2B;
+    --rule: #0A0A0A;
+    --signal: #00FF66;
+    --signal-deep: #00B048;
+    --alert: #FF5A1F;
+    --alert-deep: #C8421A;
+    --grid-c: rgba(10,10,10,0.07);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      linear-gradient(var(--grid-c) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-c) 1px, transparent 1px);
+    background-size: 80px 80px;
+    cursor: crosshair;
+  }
+  .display { font-family: 'Big Shoulders Display', 'Arial Narrow', sans-serif; font-weight: 900; line-height: 0.85; text-transform: uppercase; letter-spacing: -0.005em; }
+  .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+  /* Custom cursor target ring */
+  .scan-cursor {
+    position: fixed; pointer-events: none;
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--alert);
+    transform: translate(-50%,-50%);
+    z-index: 1000;
+    transition: width .15s, height .15s, border-color .15s;
+    mix-blend-mode: multiply;
+  }
+  .scan-cursor::before, .scan-cursor::after {
+    content: ''; position: absolute;
+    background: var(--alert);
+  }
+  .scan-cursor::before { left: 50%; top: -8px; bottom: -8px; width: 1px; transform: translateX(-50%); }
+  .scan-cursor::after  { top: 50%; left: -8px; right: -8px; height: 1px; transform: translateY(-50%); }
+  .scan-cursor.over { border-color: var(--signal-deep); }
+  .scan-cursor.over::before, .scan-cursor.over::after { background: var(--signal-deep); }
+  @media (hover: none) { .scan-cursor { display: none; } body { cursor: auto; } }
+
+  .container { max-width: 1380px; margin: 0 auto; padding: 0 32px; position: relative; }
+  @media (max-width: 720px) { .container { padding: 0 18px; } }
+
+  /* ────────────── HEADBAR ────────────── */
+  .headbar {
+    background: var(--ink);
+    color: var(--paper);
+    border-bottom: 3px solid var(--ink);
+  }
+  .headbar__inner {
+    display: flex; justify-content: space-between; align-items: stretch;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    padding: 8px 0;
+  }
+  .headbar__inner > span { display: inline-flex; align-items: center; gap: 8px; opacity: 0.85; }
+  .headbar__live { color: var(--signal); }
+  .headbar__live::before {
+    content: ''; display: inline-block;
+    width: 6px; height: 6px; background: var(--signal); border-radius: 50%;
+    animation: blink 1.4s infinite; margin-right: 6px;
+  }
+  @keyframes blink { 50% { opacity: 0.3; } }
+
+  /* ────────────── NAV ────────────── */
+  .nav {
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .nav__inner {
+    display: flex; align-items: stretch; justify-content: space-between;
+  }
+  .brand {
+    display: flex; align-items: center;
+    padding: 18px 28px 18px 0;
+    border-right: 2px solid var(--ink);
+    text-decoration: none; color: var(--ink);
+  }
+  .brand__mark {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .brand__slash { color: var(--alert); padding: 0 8px; }
+  .brand__file {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .nav__links {
+    display: flex; align-items: stretch;
+    border-left: 2px solid var(--ink);
+  }
+  .nav__links a {
+    display: flex; align-items: center;
+    padding: 0 22px;
+    color: var(--ink);
+    text-decoration: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    border-right: 2px solid var(--ink);
+    transition: background .15s, color .15s;
+  }
+  .nav__links a:hover { background: var(--ink); color: var(--paper); }
+  .nav__links a.entrar { background: var(--signal); color: var(--ink); font-weight: 600; }
+  .nav__links a.entrar:hover { background: var(--ink); color: var(--signal); }
+  @media (max-width: 860px) { .nav__links a:not(.entrar) { display: none; } }
+
+  /* ────────────── HERO ────────────── */
+  .hero {
+    border-bottom: 2px solid var(--ink);
+    padding: 0;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+  }
+  @media (max-width: 960px) { .hero { grid-template-columns: 1fr; } }
+
+  .hero__side {
+    border-right: 2px solid var(--ink);
+    padding: 36px 28px;
+    background: var(--paper-deep);
+    display: flex; flex-direction: column; gap: 36px;
+  }
+  @media (max-width: 960px) { .hero__side { border-right: none; border-bottom: 2px solid var(--ink); flex-direction: row; flex-wrap: wrap; gap: 24px; } }
+  .stat {
+    border-top: 1px solid var(--ink);
+    padding-top: 14px;
+  }
+  .stat__lbl {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .stat__n {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 800;
+    font-size: 64px;
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+  }
+  .stat__n.alert { color: var(--alert-deep); }
+  .stat__sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  .hero__main {
+    padding: 60px 56px;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 56px;
+    align-items: end;
+    position: relative;
+    overflow: hidden;
+  }
+  @media (max-width: 1080px) {
+    .hero__main { grid-template-columns: 1fr; padding: 40px 28px; }
+  }
+  .hero__caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .hero__caption::before { content: '▸'; color: var(--alert); }
+
+  .hero__headline {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 900;
+    font-size: clamp(72px, 12vw, 200px);
+    line-height: 0.82;
+    letter-spacing: -0.015em;
+    margin: 0 0 28px;
+    text-transform: uppercase;
+  }
+  .hero__headline .alert { color: var(--alert); }
+  .hero__headline .underline {
+    position: relative;
+    display: inline-block;
+  }
+  .hero__headline .underline::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0.08em;
+    height: 8px;
+    background: var(--signal);
+    z-index: -1;
+  }
+  .hero__sub {
+    margin: 0 0 36px;
+    max-width: 560px;
+    font-size: 17px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+  }
+  .hero__sub strong { color: var(--ink); font-weight: 600; }
+
+  .hero__ctas { display: flex; gap: 0; align-items: stretch; flex-wrap: wrap; border: 2px solid var(--ink); width: fit-content; }
+  .hero__ctas a {
+    padding: 18px 28px;
+    text-decoration: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    display: inline-flex; align-items: center; gap: 10px;
+    transition: background .15s, color .15s;
+  }
+  .hero__ctas .primary { background: var(--ink); color: var(--paper); border-right: 2px solid var(--ink); }
+  .hero__ctas .primary:hover { background: var(--signal); color: var(--ink); }
+  .hero__ctas .ghost { background: var(--paper); color: var(--ink); }
+  .hero__ctas .ghost:hover { background: var(--ink); color: var(--paper); }
+  .hero__ctas a::after { content: '▸'; color: var(--alert); }
+
+  /* SPECIMEN BOX (right column of hero) */
+  .specimen {
+    position: relative;
+    aspect-ratio: 5/6;
+    background: var(--ink);
+    border: 2px solid var(--ink);
+    color: var(--paper);
+    overflow: hidden;
+  }
+  .specimen__head {
+    border-bottom: 1px solid var(--paper);
+    padding: 12px 16px;
+    display: flex; justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+  .specimen__head .live { color: var(--signal); }
+  .specimen__head .live::before { content: '●  '; }
+  .specimen__viz {
+    position: relative;
+    flex: 1;
+    height: 62%;
+    background:
+      linear-gradient(180deg, #1a1a1a 0%, #0A0A0A 100%);
+    overflow: hidden;
+  }
+  .specimen__grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,102,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,102,0.07) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+  .specimen__leaf {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 75%; height: 80%;
+  }
+  .specimen__scan {
+    position: absolute; left: 0; right: 0;
+    height: 2px;
+    background: var(--alert);
+    box-shadow: 0 0 12px var(--alert), 0 0 24px var(--alert);
+    animation: cscan 2.4s linear infinite;
+  }
+  @keyframes cscan {
+    0%, 100% { top: 0; }
+    50% { top: 100%; }
+  }
+  .specimen__crosshair {
+    position: absolute;
+    width: 80px; height: 80px;
+    top: 40%; left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px dashed var(--signal);
+  }
+  .specimen__crosshair::before, .specimen__crosshair::after {
+    content: ''; position: absolute; background: var(--signal);
+  }
+  .specimen__crosshair::before {
+    left: 50%; top: -12px; bottom: -12px; width: 1px; transform: translateX(-50%);
+  }
+  .specimen__crosshair::after {
+    top: 50%; left: -12px; right: -12px; height: 1px; transform: translateY(-50%);
+  }
+  .specimen__data {
+    padding: 16px;
+    border-top: 1px solid var(--paper);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    line-height: 1.55;
+  }
+  .specimen__data .row { display: flex; justify-content: space-between; padding: 3px 0; }
+  .specimen__data .key { opacity: 0.6; letter-spacing: 0.1em; text-transform: uppercase; }
+  .specimen__data .val { color: var(--signal); font-weight: 500; }
+  .specimen__data .val.alert { color: var(--alert); }
+
+  /* ────────────── PROBLEM STATEMENT (manifesto) ────────────── */
+  .manifesto {
+    border-bottom: 2px solid var(--ink);
+    padding: 120px 0 100px;
+    background: var(--paper);
+    position: relative;
+  }
+  .manifesto__rule {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink-soft);
+    margin-bottom: 40px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .manifesto__rule::before { content: '§ 01'; color: var(--alert); font-weight: 600; }
+  .manifesto__rule::after { content: ''; flex: 1; height: 1px; background: var(--ink); }
+  .manifesto h2 {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 800;
+    font-size: clamp(48px, 7vw, 112px);
+    line-height: 0.88;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    margin: 0 0 40px;
+    max-width: 1100px;
+  }
+  .manifesto h2 .strike {
+    text-decoration: line-through;
+    text-decoration-color: var(--alert);
+    text-decoration-thickness: 6px;
+    color: var(--ink-soft);
+  }
+  .manifesto h2 .hi { background: var(--signal); padding: 0 12px; }
+  .manifesto .body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    border-top: 2px solid var(--ink);
+    padding-top: 40px;
+  }
+  @media (max-width: 860px) { .manifesto .body { grid-template-columns: 1fr; gap: 30px; } }
+  .manifesto p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .manifesto p strong { color: var(--ink); }
+
+  /* ────────────── STEPS ────────────── */
+  .steps {
+    border-bottom: 2px solid var(--ink);
+    display: grid; grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+  .step {
+    border-right: 2px solid var(--ink);
+    padding: 48px 36px 44px;
+    position: relative;
+  }
+  .step:last-child { border-right: none; }
+  @media (max-width: 860px) { .step { border-right: none; border-bottom: 2px solid var(--ink); } .step:last-child { border-bottom: none; } }
+  .step__num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--alert);
+    margin-bottom: 28px;
+  }
+  .step__title {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 0.88;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    margin: 0 0 18px;
+  }
+  .step__body {
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.5;
+    max-width: 380px;
+  }
+  .step__ic {
+    margin-top: 28px;
+    width: 60px; height: 60px;
+    border: 2px solid var(--ink);
+    display: grid; place-items: center;
+  }
+  .step__ic svg { width: 30px; height: 30px; }
+
+  /* ────────────── FOCOS TABLE ────────────── */
+  .focos {
+    border-bottom: 2px solid var(--ink);
+    padding: 90px 0 100px;
+  }
+  .focos__head {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 40px;
+    gap: 32px; flex-wrap: wrap;
+  }
+  .focos__head h2 {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 800;
+    font-size: clamp(48px, 6vw, 88px);
+    line-height: 0.88;
+    margin: 8px 0 0;
+    text-transform: uppercase;
+  }
+  .focos__rule {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink-soft);
+  }
+  .focos__rule::before { content: '§ 02 '; color: var(--alert); font-weight: 600; }
+  .focos__counter {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+  .focos__counter .n {
+    display: block;
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .focos__counter .live::before {
+    content: '●';
+    color: var(--signal-deep);
+    margin-right: 6px;
+    animation: blink 1.4s infinite;
+  }
+  .focos__grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 0;
+    border: 2px solid var(--ink);
+  }
+  @media (max-width: 960px) { .focos__grid { grid-template-columns: 1fr; } }
+  .focos__map {
+    background: var(--ink);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+    min-height: 460px;
+    border-right: 2px solid var(--ink);
+  }
+  @media (max-width: 960px) { .focos__map { border-right: none; border-bottom: 2px solid var(--ink); } }
+  .focos__map svg { width: 100%; height: 100%; display: block; position: absolute; inset: 0; }
+  .focos__map .pulse {
+    transform-origin: center;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { r: 6; opacity: 0.95; }
+    50% { r: 14; opacity: 0.35; }
+  }
+  .focos__map .corner {
+    position: absolute;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(236,233,226,0.6);
+    z-index: 2;
+  }
+  .focos__map .corner.tl { top: 16px; left: 18px; }
+  .focos__map .corner.tr { top: 16px; right: 18px; color: var(--signal); }
+  .focos__map .corner.tr::before { content: '● '; }
+  .focos__map .corner.bl { bottom: 16px; left: 18px; }
+  .focos__map .corner.br { bottom: 16px; right: 18px; }
+
+  .focos__list {
+    background: var(--paper);
+  }
+  .focos__list .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--ink);
+    transition: background .15s;
+    cursor: crosshair;
+  }
+  .focos__list .row:last-child { border-bottom: none; }
+  .focos__list .row:hover { background: var(--signal); }
+  .focos__list .row:hover .row__count { color: var(--ink); }
+  .focos__list .row__name {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    text-transform: uppercase;
+    line-height: 1;
+    letter-spacing: -0.005em;
+  }
+  .focos__list .row__sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-soft);
+    margin-top: 5px;
+  }
+  .focos__list .row__count {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 800;
+    font-size: 44px;
+    color: var(--alert-deep);
+    line-height: 1;
+  }
+
+  /* ────────────── CTA ────────────── */
+  .cta {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 100px 0 120px;
+    border-bottom: 2px solid var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .cta::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(236,233,226,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(236,233,226,0.05) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+  }
+  .cta__rule {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--signal);
+    margin-bottom: 36px;
+  }
+  .cta__rule::before { content: '§ 03  '; }
+  .cta h2 {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 900;
+    font-size: clamp(56px, 9vw, 152px);
+    line-height: 0.85;
+    margin: 0 0 36px;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    max-width: 1100px;
+  }
+  .cta h2 .hi { background: var(--alert); color: var(--ink); padding: 0 14px; }
+  .cta p {
+    max-width: 580px;
+    font-size: 17px;
+    color: rgba(236,233,226,0.7);
+    margin: 0 0 40px;
+  }
+  .cta .btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 22px 32px;
+    background: var(--signal);
+    color: var(--ink);
+    text-decoration: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    border: 2px solid var(--signal);
+    transition: background .15s, color .15s;
+  }
+  .cta .btn:hover { background: transparent; color: var(--signal); }
+  .cta .btn::after { content: '▸'; }
+
+  /* ────────────── TICKER / FOOTER ────────────── */
+  .ticker {
+    background: var(--signal);
+    color: var(--ink);
+    border-bottom: 2px solid var(--ink);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+  }
+  .ticker__inner {
+    display: inline-block;
+    animation: ticker 32s linear infinite;
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .ticker__inner span { display: inline-block; padding: 0 24px; }
+  .ticker__inner span::before { content: '◆'; color: var(--alert); padding-right: 24px; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  footer {
+    background: var(--paper);
+    padding: 50px 0 24px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 40px;
+  }
+  @media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  footer h5 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-soft);
+    margin: 0 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--ink);
+  }
+  footer .mark {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 900;
+    font-size: 44px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  footer .mark .slash { color: var(--alert); }
+  footer .tag {
+    color: var(--ink-soft);
+    max-width: 280px;
+    margin-top: 14px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  footer a {
+    display: block;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 5px 0;
+    font-size: 14px;
+  }
+  footer a:hover { color: var(--alert-deep); }
+  .colophon {
+    margin-top: 56px;
+    border-top: 2px solid var(--ink);
+    padding-top: 18px;
+    display: flex; justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom scan cursor -->
+<div class="scan-cursor" id="cursor" aria-hidden="true"></div>
+
+<!-- ────────────── HEADBAR ────────────── -->
+<div class="headbar">
+  <div class="container headbar__inner">
+    <span>Agroscan · Dossier 01</span>
+    <span class="headbar__live">412 escaneos · Santa Cruz · hoy</span>
+    <span>Edición Bolivia · 2026</span>
+  </div>
+</div>
+
+<!-- ────────────── NAV ────────────── -->
+<nav class="nav">
+  <div class="container nav__inner">
+    <a href="#" class="brand">
+      <span class="brand__mark">Agroscan</span>
+      <span class="brand__slash">/</span>
+      <span class="brand__file">dossier_01.bo</span>
+    </a>
+    <div class="nav__links">
+      <a href="#problema">Problema</a>
+      <a href="#como">Cómo opera</a>
+      <a href="#focos">Focos</a>
+      <a href="#coops">Cooperativas</a>
+      <a href="#" class="entrar">Entrar ▸</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ────────────── HERO ────────────── -->
+<section class="hero">
+  <aside class="hero__side">
+    <div class="stat">
+      <div class="stat__lbl">Productores SCZ</div>
+      <div class="stat__n">200K</div>
+      <div class="stat__sub">activos / 2024</div>
+    </div>
+    <div class="stat">
+      <div class="stat__lbl">Agrónomos</div>
+      <div class="stat__n alert">1 / 800</div>
+      <div class="stat__sub">cobertura técnica</div>
+    </div>
+    <div class="stat">
+      <div class="stat__lbl">Diagnóstico</div>
+      <div class="stat__n alert">80%</div>
+      <div class="stat__sub">a ojo · sin asistencia</div>
+    </div>
+  </aside>
+
+  <div class="hero__main">
+    <div>
+      <div class="hero__caption">Caso 01 / Diagnóstico de plagas / Santa Cruz</div>
+      <h1 class="hero__headline">
+        Identificá<br/>
+        la <span class="underline">plaga.</span><br/>
+        Fumigá <span class="alert">lo justo.</span>
+      </h1>
+      <p class="hero__sub">
+        <strong>Una foto. Doce segundos.</strong> AgroScan compara contra
+        un catálogo curado de 30 plagas locales y devuelve diagnóstico
+        con tratamiento orgánico y químico — dosis, activos, momento óptimo.
+        Funciona en la chacra sin señal.
+      </p>
+      <div class="hero__ctas">
+        <a class="primary" href="#">Descargar app</a>
+        <a class="ghost" href="#">Panel cooperativa</a>
+      </div>
+    </div>
+
+    <!-- SPECIMEN -->
+    <div class="specimen">
+      <div class="specimen__head">
+        <span>Spec / 089-A</span>
+        <span class="live">en análisis</span>
+      </div>
+      <div class="specimen__viz">
+        <div class="specimen__grid"></div>
+        <svg class="specimen__leaf" viewBox="0 0 200 240" aria-hidden="true">
+          <defs>
+            <linearGradient id="lf" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#3d4f24"/>
+              <stop offset="1" stop-color="#1d2611"/>
+            </linearGradient>
+          </defs>
+          <path d="M100 20 C 40 30, 25 130, 50 200 C 80 240, 150 230, 170 180 C 190 110, 160 30, 100 20 Z"
+                fill="url(#lf)" stroke="#00FF66" stroke-opacity="0.25" stroke-width="1"/>
+          <path d="M100 25 Q 108 130 115 220" stroke="#00FF66" stroke-opacity="0.35" stroke-width="1" fill="none"/>
+          <circle cx="80" cy="100" r="8" fill="#FF5A1F"/>
+          <circle cx="125" cy="135" r="6" fill="#FF5A1F"/>
+          <circle cx="95" cy="160" r="7" fill="#FF5A1F"/>
+          <circle cx="140" cy="90" r="5" fill="#FF5A1F"/>
+        </svg>
+        <div class="specimen__crosshair"></div>
+        <div class="specimen__scan"></div>
+      </div>
+      <div class="specimen__data">
+        <div class="row"><span class="key">Especie</span><span class="val">Phakopsora pachyrhizi</span></div>
+        <div class="row"><span class="key">Cultivo</span><span class="val">Glycine max</span></div>
+        <div class="row"><span class="key">Severidad</span><span class="val alert">media · 64%</span></div>
+        <div class="row"><span class="key">Confianza</span><span class="val">0.89</span></div>
+        <div class="row"><span class="key">Coord</span><span class="val">−17.46, −62.79</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── MANIFESTO / PROBLEMA ────────────── -->
+<section class="manifesto" id="problema">
+  <div class="container">
+    <div class="manifesto__rule">Problema · cifras públicas</div>
+    <h2>
+      No es <span class="strike">falta de voluntad,</span><br/>
+      es <span class="hi">falta de escala.</span>
+    </h2>
+    <div class="body">
+      <p>
+        En Santa Cruz hay <strong>200.000 productores agrícolas</strong> activos
+        y <strong>1 agrónomo cada 800 productores</strong>. La consecuencia es
+        directa: se fumiga lo que parece, no lo que es. Por eso 8 de cada 10
+        diagnósticos se hacen a ojo.
+      </p>
+      <p>
+        El error cuesta <strong>USD 50 millones al año</strong> en mal uso
+        de agroquímicos y entre <strong>Bs 200 y Bs 800 por hectárea</strong>
+        en rinde perdido por productor. Sin contar la contaminación de pozos,
+        suelos y las intoxicaciones rurales que no aparecen en los balances.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── CÓMO OPERA ────────────── -->
+<section id="como" style="border-bottom: 2px solid var(--ink); padding: 60px 0 0; background: var(--paper-deep);">
+  <div class="container">
+    <div class="manifesto__rule" style="margin-bottom:32px;">Cómo opera · tres pasos</div>
+  </div>
+</section>
+<div class="steps">
+  <article class="step">
+    <div class="step__num">001 · captura</div>
+    <h3 class="step__title">Enfocá<br/>la hoja.</h3>
+    <p class="step__body">Cámara fullscreen con overlay guía. La app rechaza fotos movidas o con mala luz antes de procesar.</p>
+    <div class="step__ic">
+      <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="24" height="18"/><circle cx="15" cy="16" r="5"/></svg>
+    </div>
+  </article>
+  <article class="step" style="background: var(--paper);">
+    <div class="step__num">002 · análisis</div>
+    <h3 class="step__title">El modelo<br/>identifica.</h3>
+    <p class="step__body">Comparación contra catálogo curado de 30 plagas SCZ. Sin alucinación, sin tratamientos inventados.</p>
+    <div class="step__ic" style="background: var(--signal); border-color: var(--ink);">
+      <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13" cy="13" r="8"/><path d="M19 19l7 7"/></svg>
+    </div>
+  </article>
+  <article class="step">
+    <div class="step__num">003 · acción</div>
+    <h3 class="step__title">Tratamiento<br/>con dosis.</h3>
+    <p class="step__body">Activos, marcas comerciales, momento óptimo y opción orgánica. Listo para el campo, sin interpretación.</p>
+    <div class="step__ic">
+      <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 25 L 15 5 L 25 25 Z"/><line x1="10" y1="20" x2="20" y2="20"/></svg>
+    </div>
+  </article>
+</div>
+
+<!-- ────────────── FOCOS ────────────── -->
+<section class="focos" id="focos">
+  <div class="container">
+    <div class="focos__head">
+      <div>
+        <div class="focos__rule">Focos / esta semana</div>
+        <h2>Mapa de focos en vivo.</h2>
+      </div>
+      <div class="focos__counter">
+        <span class="n">412</span>
+        <span class="live">actualizado hace 10 min</span>
+      </div>
+    </div>
+
+    <div class="focos__grid">
+      <div class="focos__map">
+        <svg viewBox="0 0 600 460" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="dotgrid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="0.6" fill="#00FF66" fill-opacity="0.18"/>
+            </pattern>
+          </defs>
+          <rect width="600" height="460" fill="url(#dotgrid)"/>
+          <path d="M 70 360 C 90 280, 60 200, 130 150 C 220 100, 340 110, 420 150 C 500 200, 510 320, 440 380 C 360 430, 180 420, 70 360 Z"
+                fill="#1a1a1a" stroke="#00FF66" stroke-opacity="0.35" stroke-width="1.2"/>
+          <path d="M 130 200 Q 220 240 280 220 T 460 280" stroke="#00FF66" stroke-opacity="0.4" stroke-width="1.4" fill="none"/>
+
+          <g font-family="IBM Plex Mono, monospace" font-size="9" fill="#ECE9E2" fill-opacity="0.55" letter-spacing="1.2">
+            <text x="295" y="270">SANTA CRUZ</text>
+            <text x="165" y="225">WARNES</text>
+            <text x="395" y="178">CUATRO CAÑADAS</text>
+            <text x="235" y="358">PAILÓN</text>
+            <text x="135" y="328">LA GUARDIA</text>
+            <text x="455" y="358">SAN JULIÁN</text>
+          </g>
+
+          <g fill="#FF5A1F">
+            <circle class="pulse" cx="420" cy="195" r="6"/>
+            <circle class="pulse" cx="295" cy="282" r="6" style="animation-delay:.4s"/>
+            <circle class="pulse" cx="245" cy="355" r="6" style="animation-delay:.8s"/>
+            <circle class="pulse" cx="478" cy="355" r="6" style="animation-delay:1.2s"/>
+            <circle class="pulse" cx="185" cy="232" r="6" style="animation-delay:1.6s"/>
+          </g>
+        </svg>
+        <div class="corner tl">MAPA SCZ / 1:2.5M</div>
+        <div class="corner tr">LIVE</div>
+        <div class="corner bl">N ↑</div>
+        <div class="corner br">0 — 50 KM</div>
+      </div>
+
+      <div class="focos__list">
+        <div class="row">
+          <div>
+            <div class="row__name">Roya asiática</div>
+            <div class="row__sub">Soya · Cuatro Cañadas</div>
+          </div>
+          <div class="row__count">127</div>
+        </div>
+        <div class="row">
+          <div>
+            <div class="row__name">Chinche verde</div>
+            <div class="row__sub">Maíz · Pailón</div>
+          </div>
+          <div class="row__count">84</div>
+        </div>
+        <div class="row">
+          <div>
+            <div class="row__name">Picudo</div>
+            <div class="row__sub">Algodón · San Julián</div>
+          </div>
+          <div class="row__count">52</div>
+        </div>
+        <div class="row">
+          <div>
+            <div class="row__name">Mosca blanca</div>
+            <div class="row__sub">Sorgo · Warnes</div>
+          </div>
+          <div class="row__count">38</div>
+        </div>
+        <div class="row">
+          <div>
+            <div class="row__name">Mancha foliar</div>
+            <div class="row__sub">Soya · La Guardia</div>
+          </div>
+          <div class="row__count">24</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── CTA ────────────── -->
+<section class="cta" id="coops">
+  <div class="container">
+    <div class="cta__rule">Para cooperativas / SENASAG / INIAF</div>
+    <h2>El panel <span class="hi">ve todo</span><br/> antes que el campo.</h2>
+    <p>
+      Validación de diagnósticos, mapa de focos por región, alertas zonales push,
+      analytics por plaga y export CSV. Decisiones agronómicas con datos, no con rumores.
+    </p>
+    <a class="btn" href="#">Solicitar acceso institucional</a>
+  </div>
+</section>
+
+<!-- ────────────── TICKER ────────────── -->
+<div class="ticker">
+  <div class="ticker__inner">
+    <span>Roya asiática · Cuatro Cañadas · 127 casos</span>
+    <span>Chinche verde · Pailón · 84 casos</span>
+    <span>Picudo · San Julián · 52 casos</span>
+    <span>Mosca blanca · Warnes · 38 casos</span>
+    <span>Mancha foliar · La Guardia · 24 casos</span>
+    <span>Roya asiática · Cuatro Cañadas · 127 casos</span>
+    <span>Chinche verde · Pailón · 84 casos</span>
+    <span>Picudo · San Julián · 52 casos</span>
+    <span>Mosca blanca · Warnes · 38 casos</span>
+    <span>Mancha foliar · La Guardia · 24 casos</span>
+  </div>
+</div>
+
+<!-- ────────────── FOOTER ────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="mark">Agro<span class="slash">/</span>scan</div>
+        <p class="tag">Dossier agronómico construido en Santa Cruz, para Santa Cruz. 2026.</p>
+      </div>
+      <div>
+        <h5>Producto</h5>
+        <a href="#">App Android</a>
+        <a href="#">Panel</a>
+        <a href="#">Catálogo</a>
+      </div>
+      <div>
+        <h5>Equipo</h5>
+        <a href="#">Nosotros</a>
+        <a href="#">Aliados</a>
+        <a href="#">Prensa</a>
+      </div>
+      <div>
+        <h5>Contacto</h5>
+        <a href="mailto:hola@agroscan.bo">hola@agroscan.bo</a>
+        <a href="#">Santa Cruz · BO</a>
+      </div>
+    </div>
+    <div class="colophon">
+      <span>© 2026 · Dossier 01</span>
+      <span>Tipos · Big Shoulders / IBM Plex</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Custom scan cursor
+  (function() {
+    var c = document.getElementById('cursor');
+    if (!c) return;
+    var x = window.innerWidth / 2, y = window.innerHeight / 2;
+    var tx = x, ty = y;
+    document.addEventListener('mousemove', function(e) {
+      tx = e.clientX; ty = e.clientY;
+    });
+    document.querySelectorAll('a, button, .row, .step__ic, .specimen').forEach(function(el) {
+      el.addEventListener('mouseenter', function() { c.classList.add('over'); });
+      el.addEventListener('mouseleave', function() { c.classList.remove('over'); });
+    });
+    function loop() {
+      x += (tx - x) * 0.22;
+      y += (ty - y) * 0.22;
+      c.style.left = x + 'px';
+      c.style.top = y + 'px';
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+</script>
+
+</body>
+</html>
