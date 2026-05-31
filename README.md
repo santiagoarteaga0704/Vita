@@ -12,7 +12,7 @@
 | Documento técnico (PDF) | [`docs/entrega/Vita-Documento-Tecnico.pdf`](docs/entrega/Vita-Documento-Tecnico.pdf) |
 | Diapositivas del pitch (PDF) | [`docs/entrega/Vita-Pitch.pdf`](docs/entrega/Vita-Pitch.pdf) |
 | Código MVP funcional | Este mismo repositorio — ver [`COMO_CORRER.md`](COMO_CORRER.md) para arrancarlo en menos de 5 minutos |
-| Video demo en YouTube | _Pendiente — se agrega el link cuando esté publicado_ |
+| Video demo en YouTube | https://youtube.com/shorts/WCRq5OrJwMI?feature=share |
 
 ## Equipo
 
