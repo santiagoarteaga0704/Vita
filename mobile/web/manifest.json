@@ -1,11 +1,11 @@
 {
-    "name": "agroscan",
-    "short_name": "agroscan",
+    "name": "Vita",
+    "short_name": "Vita",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Vita — Visión inteligente para tu cosecha",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

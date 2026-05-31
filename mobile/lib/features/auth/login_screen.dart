@@ -51,13 +51,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const Icon(Icons.local_florist, size: 80, color: Color(0xFF2E7D32)),
               const SizedBox(height: 16),
               const Text(
-                'AgroScan',
+                'Vita',
                 style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               const Text(
-                'Tu agrónomo de bolsillo',
+                'Visión inteligente para tu cosecha',
                 style: TextStyle(fontSize: 16, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),

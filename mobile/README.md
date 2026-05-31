@@ -1,6 +1,7 @@
-# agroscan
+# vita
 
-A new Flutter project.
+App móvil de Vita — Visión inteligente para tu cosecha.
+Identifica plagas y enfermedades de soya, maíz, sorgo y otros cultivos a partir de una foto.
 
 ## Getting Started
 

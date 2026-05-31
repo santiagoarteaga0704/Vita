@@ -1,4 +1,4 @@
-// AgroScan widget tests placeholder
+// Vita widget tests placeholder
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
